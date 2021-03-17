@@ -17,14 +17,15 @@ class AuthService:
             }
             return message_object
         elif get_user_data is not None and get_user_data.VerifyPassword(data['password']):
-            access_token = create_access_token(identity=data['username'])
-            refresh_token = create_refresh_token(identity=data['username'])
+            eth_wallet = get_user_data.ethereum['ethereum_address']
+            access_token = create_access_token(data['username'], additional_claims={"eth_wallet":eth_wallet})
+            refresh_token = create_refresh_token(data['username'], additional_claims={"eth_wallet":eth_wallet})
             message_object = {
                 'status':'Berhasil',
                 'data':{
                     'jwt_token':access_token,
                     'refresh_token':refresh_token,
-                    'address':get_user_data.ethereum['ethereum_address']
+                    'address':eth_wallet
                 }
             }
             return message_object

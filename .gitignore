@@ -2,4 +2,4 @@ env/
 .env
 .flaskenv
 __pycache__/
-project/service/test_service.py
+project/percobaan/

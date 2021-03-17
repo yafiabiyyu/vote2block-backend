@@ -27,7 +27,7 @@ class DataEncryption:
     def Encrypting(self, data):
         key = self.GenerateKey()
         f = Fernet(key)
-        encrypted_data = f.encrypt(str(data).encode())
+        encrypted_data = f.encrypt(data)
         return encrypted_data
     def Decrypting(self, encrypted_data):
         key = self.GenerateKey()
