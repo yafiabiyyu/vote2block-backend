@@ -1,45 +1,41 @@
 from web3 import Web3, HTTPProvider
 from dotenv import load_dotenv
+from project.models.user_model import UserDoc
+from project.service.enkripsi_service import DataEncryption
+from eth_account.messages import encode_defunct
 import os
 import json
 
 load_dotenv()
+de = DataEncryption()
 
 class EthereumService:
-    def setup(self):
+    def SetupW3(self):
         rpc_url = os.getenv("RPC_URL")
+        default_account = os.getenv('DEFAULT_ACCOUNT')
         w3 = Web3(HTTPProvider(rpc_url))
         return w3
 
     def AccessContract(self):
-        w3 = self.setup()
+        w3 = self.SetupW3()
         contract_file = open('project/smart-contract/Vote2Block.json')
         data = json.load(contract_file)
         abi = data['abi']
         contract_address = os.getenv("CONTRACT_ADDRESS")
         contract = w3.eth.contract(
-            address=w3.toChecksumAddress(contract_address),
+            address=contract_address,
             abi=abi
         )
         return contract
     
     def CreateWallet(self):
         key = os.getenv("SECRET_KEY")
-        w3 = self.setup()
+        w3 = self.SetupW3()
         account = w3.eth.account.create(key)
         return account.privateKey, account.address
-    
-    def AddAdminPetugas(self, admin_address, ketua_address):
-        w3 = self.setup()
-        contract = self.AccessContract()
-        user_nonce = w3.eth.get_transaction_count(ketua_address)
-        addAdmin_tx = contract.functions.addAdminPetugas(
-            w3.toChecksumAddress(admin_address)
-        ).buildTransaction({
-            'chainId':5777,
-            'gas':70000,
-            'gasPrice':w3.toWei('1', 'gwei'),
-            'nonce':user_nonce
-        })
-        print(addAdmin_tx)
-        return addAdmin_tx
+
+    def GetEthAccess(self, user_data):
+        user_access = UserDoc.objects(username=user_data).first()
+        user_address = user_access.ethereum['ethereum_address']
+        user_priv = de.Decrypting(user_access.ethereum['ethereum_access'].encode())
+        return user_address, user_priv

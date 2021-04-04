@@ -37,11 +37,11 @@ class ManageAdminPetugas(Resource):
     @jwt_required()
     def post(self):
         try:
-            ketua_address = get_jwt()['eth_wallet']
             user_data = get_jwt()['sub']
             get_json_data = request.json
-            result = ks.AddAdminPetugas(get_json_data, ketua_address, user_data)
-            # return jsonify(result)
+            result = ks.AddAdminPetugas(get_json_data, user_data)
+            # result = ks.WalletSetup()
+            return jsonify(result)
         except Exception as e:
             api.abort(400, e)
 

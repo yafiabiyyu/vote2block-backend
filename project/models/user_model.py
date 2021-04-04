@@ -1,4 +1,4 @@
-from project import db
+from project.factory import db
 from werkzeug.security import (
     generate_password_hash,
     check_password_hash
