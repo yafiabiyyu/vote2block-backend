@@ -32,10 +32,5 @@ class EthereumService:
         key = os.getenv("SECRET_KEY")
         w3 = self.SetupW3()
         account = w3.eth.account.create(key)
-        return account.privateKey, account.address
-
-    def GetEthAccess(self, user_data):
-        user_access = UserDoc.objects(username=user_data).first()
-        user_address = user_access.ethereum['ethereum_address']
-        user_priv = de.Decrypting(user_access.ethereum['ethereum_access'].encode())
-        return user_address, user_priv
+        ethereum_access = de.Encrypting(account.privateKey)
+        return account.address, ethereum_access
