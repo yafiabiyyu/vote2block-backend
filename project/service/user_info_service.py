@@ -10,6 +10,11 @@ class UserInfo:
         data = UserDoc.objects(username=user_data).first()
         return data
     
+    def GetUserHistoryTx(self, user_data):
+        user = UserDoc.objects(username=user_data).first()
+        get_history = UserTxHistoryDoc.objects(user_data = user).first()
+        return get_history
+    
     def GetUserData(self, user_data):
         data = UserDoc.objects(username=user_data).first()
         user_address = data.ethereum['ethereum_address']
