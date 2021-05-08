@@ -12,7 +12,7 @@ class UserInfo:
     
     def GetUserHistoryTx(self, user_data):
         user = UserDoc.objects(username=user_data).first()
-        get_history = UserTxHistoryDoc.objects(user_data = user).first()
+        get_history = list(UserTxHistoryDoc.objects(user_data = user).all())
         return get_history
     
     def GetUserData(self, user_data):

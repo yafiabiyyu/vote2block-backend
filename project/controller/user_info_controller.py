@@ -22,7 +22,7 @@ alamat['alamat_lengkap'] = fields.String(attribute='alamat_lengkap')
 
 access = {}
 access['level'] = fields.String(attribute='level')
-access['group'] = fields.String(attribute='group')
+access['status'] = fields.String(attribute='status')
 
 ethereum = {}
 ethereum['ethereum_address'] = fields.String(attribute='ethereum_address')
@@ -59,7 +59,7 @@ class GetUserInfo(Resource):
 @api.route('/riwayat')
 class GetUserTxHistory(Resource):
     @jwt_required()
-    @marshal_with(user_history_model, envelope="data")
+    @api.marshal_list_with(user_history_model, envelope="data")
     def get(self):
         user_data = get_jwt()['sub']
         result = us.GetUserHistoryTx(user_data)
