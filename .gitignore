@@ -1,2 +1,5 @@
 env/
 .env
+.flaskenv
+__pycache__/
+project/percobaan/
