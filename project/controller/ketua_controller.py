@@ -82,3 +82,16 @@ class ManageSinglePetugas(Resource):
             return jsonify(result)
         else:
             api.abort(500, result['message'])
+
+@api.route("/manage/voting/schedule")
+class ManageSchedule(Resource):
+    @jwt_required()
+    def post(self):
+        user_data = get_jwt()['sub']
+        json_data = request.json
+        result = ks.VotingTimeStampSet(json_data, user_data)
+        if result['status'] == "Berhasil" or result['status'] == "Gagal":
+            return jsonify(result)
+        else:
+            api.abort(500, result['message'])
+

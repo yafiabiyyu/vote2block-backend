@@ -1,8 +1,12 @@
 from project.models.user_model import UserDoc
+from project.models.voting_model import VotingTimeStamp
 from project.service.enkripsi_service import DataEncryption
 from project.service.ethereum_service import EthereumService
 from project.service.user_info_service import UserInfo
-from project.tasks.tasks import SavePetugasToContract,RemovePetugasFromContract
+from project.tasks.tasks import (SavePetugasToContract,
+                                 RemovePetugasFromContract,
+                                 SetVotingTimeStamp
+                                 )
 from eth_account.messages import encode_defunct
 from celery.result import AsyncResult
 from datetime import datetime
@@ -147,3 +151,54 @@ class KetuaService:
     def GetOnePetugas(self, petugasId):
         user = UserDoc.objects(id=str(petugasId)).first()
         return user
+
+    def VotingTimeStampSet(self, json_data,user_data):
+        w3 = es.SetupW3()
+        ketua_address, ketua_access = us.GetUserData(user_data)
+        user = UserDoc.objects(username=user_data).first()
+        if user.access['level'] == "ketua":
+            try:
+                set_timestamp = VotingTimeStamp(
+                    register_start = json_data['register_start'],
+                    register_finis = json_data['register_finis'],
+                    voting_start = json_data['voting_start'],
+                    voting_finis = json_data['voting_finis']
+                )
+                set_timestamp.save()
+                # set save timestamp to smart-contract
+                msg = w3.soliditySha3(
+                    ['uint256','uint256','uint256','uint256'],
+                    [
+                        int(json_data['register_start']),
+                        int(json_data['register_finis']),
+                        int(json_data['voting_start']),
+                        int(json_data['voting_finis'])
+                    ]
+                )
+                message = encode_defunct(primitive=msg)
+                sign_message = w3.eth.account.sign_message(message,ketua_access)
+                result = SetVotingTimeStamp.delay(
+                    int(json_data['register_start']),
+                    int(json_data['register_finis']),
+                    int(json_data['voting_start']),
+                    int(json_data['voting_finis']),
+                    sign_message.signature.hex()
+                )
+                us.SaveUserTx(user_data, result.wait(), sign_message.signature.hex())
+                message_object = {
+                    "status":"Berhasil",
+                    "message":"Waktu berhasil di setup"
+                }
+                return message_object
+            except Exception as e:
+                message_object = {
+                    "status":"Error",
+                    "message":e
+                }
+                return message_object
+        else:
+            message_object = {
+                "status":"Gagal",
+                "message":"Anda tidak memiliki akses"
+            }
+            return message_object
