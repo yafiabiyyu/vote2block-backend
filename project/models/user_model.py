@@ -1,4 +1,4 @@
-from project import db
+from project.factory import db
 from werkzeug.security import (
     generate_password_hash,
     check_password_hash
@@ -20,6 +20,12 @@ class UserDoc(db.Document):
         return check_password_hash(
             pwhash = self.password_hash, password=password
         )
+
+class UserTxHistoryDoc(db.Document):
+    user_data = db.ReferenceField("UserDoc")
+    tx_hash = db.StringField(required=True)
+    signature_data = db.StringField(required=True)
+
 
 class RevokedTokenDoc(db.Document):
     jti = db.StringField(max_length=120)
