@@ -1,8 +1,9 @@
 from project.factory import db
 from werkzeug.security import (
     generate_password_hash,
-    check_password_hash
+    check_password_hash,
 )
+
 
 class UserDoc(db.Document):
     username = db.StringField(required=True)
@@ -15,11 +16,12 @@ class UserDoc(db.Document):
 
     def GeneratePasswordHash(self, password):
         self.password_hash = generate_password_hash(password)
-    
+
     def VerifyPassword(self, password):
         return check_password_hash(
-            pwhash = self.password_hash, password=password
+            pwhash=self.password_hash, password=password
         )
+
 
 class UserTxHistoryDoc(db.Document):
     user_data = db.ReferenceField("UserDoc")
@@ -29,7 +31,7 @@ class UserTxHistoryDoc(db.Document):
 
 class RevokedTokenDoc(db.Document):
     jti = db.StringField(max_length=120)
-    
+
     def IsJtiBlackListed(jti):
         Query = RevokedTokenDoc.objects(jti=jti).first()
         return bool(Query)
