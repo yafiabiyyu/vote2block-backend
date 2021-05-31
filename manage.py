@@ -9,6 +9,6 @@
 from project import factory
 import project
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = factory.create_app(celery=project.celery)
     app.run()
