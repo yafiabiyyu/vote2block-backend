@@ -15,6 +15,7 @@ PKG_NAME = os.path.dirname(os.path.realpath(__file__)).split("/")[-1]
 
 def create_app(app_name=PKG_NAME, **kwargs):
     app = Flask(app_name)
+    app.config['ERROR_404_HELP'] = False
     app.config.update(
         SECRET_KEY=os.getenv("SECRET_KEY"),
         JWT_SECRET_KEY=os.getenv("JWT_KEY"),
