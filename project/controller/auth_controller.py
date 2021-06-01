@@ -43,3 +43,16 @@ class LoginResource(Resource):
             return result
         else:
             api.abort(404, result)
+
+@api.route("/logout")
+class LogoutResource(Resource):
+    @api.doc(responses={200:"OK", 400:"Bad Requests"})
+    @api.marshal_with(message_object)
+    @jwt_required()
+    def post(self):
+        jti = get_jwt()['jti']
+        try:
+            result = auth.LogoutService(jti)
+            return result
+        except Exception:
+            return api.abort(400, {"status": "gagal", "message": "terjadi kesalahan"})
