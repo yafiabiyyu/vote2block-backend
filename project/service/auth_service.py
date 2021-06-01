@@ -1,52 +1,56 @@
+from os import access
+
+from celery.utils.collections import Messagebuffer
 from project.models.user_model import UserDoc, RevokedTokenDoc
 from flask_jwt_extended import create_access_token, create_refresh_token
 
 
 class AuthService:
-    def LoginService(self, data):
-        get_user_data = UserDoc.objects(
-            username=data["username"]
+    def LoginService(self, json_data):
+        get_user_information = UserDoc.objects(
+            username=json_data["username"]
         ).first()
-        if get_user_data is None:
+        if get_user_information is None:
             message_object = {
-                "status": "Gagal",
-                "message": "Username {} tidak ditemukan".format(
-                    data["username"]
-                ),
+                "status": "error",
+                "message": "Data user tidak ditemukan",
             }
             return message_object
-        elif get_user_data is not None and get_user_data.VerifyPassword(
-            data["password"]
+        elif (
+            get_user_information is not None
+            and get_user_information.VerifyPassword(
+                json_data["password"]
+            )
         ):
-            eth_wallet = get_user_data.ethereum["ethereum_address"]
-            access_token = create_access_token(
-                data["username"],
-                additional_claims={"eth_wallet": eth_wallet},
-            )
-            refresh_token = create_refresh_token(
-                data["username"],
-                additional_claims={"eth_wallet": eth_wallet},
-            )
+            access_token = create_access_token(json_data["username"])
+            refresh_token = create_refresh_token(json_data["username"])
             message_object = {
                 "status": "Berhasil",
+                "message": "User berhasil login",
                 "data": {
-                    "jwt_token": access_token,
-                    "refresh_token": refresh_token,
-                    "address": eth_wallet,
+                    "access_token": access_token,
+                    "refresh_token": access_token,
                 },
             }
             return message_object
         else:
-            return {
+            message_object = {
                 "status": "Gagal",
-                "message": "Username atau Password salah",
+                "message": "Username atau password salah",
             }
+            return message_object
 
     def LogoutService(self, jti):
         revoked_token = RevokedTokenDoc(jti=jti).save()
         if revoked_token:
             message_object = {
                 "status": "Berhasil",
-                "message": "Berhasil Logout",
+                "message": "Berhasil logout",
+            }
+            return message_object
+        else:
+            message_object = {
+                "status": "Gagal",
+                "message": "Gagal logout",
             }
             return message_object
