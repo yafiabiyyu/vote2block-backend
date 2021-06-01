@@ -8,8 +8,25 @@ es = EthereumService()
 
 class UserInfo:
     def GetUserInfo(self, user_data):
-        data = UserDoc.objects(username=user_data).first()
-        return data
+        get_user_info = UserDoc.objects(username=user_data).first()
+        return get_user_info
+
+    def UpdateDefaultPassword(self, user_data, new_password):
+        get_user_data = UserDoc.obbjects(username=user_data).first()
+        new_password_user = get_user_data.UpdatePassword(new_password)
+        try:
+            update_user_data = UserDoc.objects(
+                username=user_data
+            ).update(password_hash=new_password_user)
+        except Exception as e:
+            message_object = {"status": "Error", "message": e}
+            return message_object
+        else:
+            message_object = {
+                "status": "Berhasil",
+                "message": "User berhasil memperbarui data password",
+            }
+            return message_object
 
     def GetUserHistoryTx(self, user_data):
         user = UserDoc.objects(username=user_data).first()
