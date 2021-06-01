@@ -16,6 +16,9 @@ class UserDoc(db.Document):
 
     def GeneratePasswordHash(self, password):
         self.password_hash = generate_password_hash(password)
+    
+    def UpdatePassword(self, password):
+        return generate_password_hash(password=password)
 
     def VerifyPassword(self, password):
         return check_password_hash(
