@@ -1,3 +1,4 @@
+from werkzeug.exceptions import NotFound
 from project.models.user_model import UserDoc, UserTxHistoryDoc
 from project.service.enkripsi_service import DataEncryption
 from project.service.ethereum_service import EthereumService
@@ -8,8 +9,26 @@ es = EthereumService()
 
 class UserInfo:
     def GetUserInfo(self, user_data):
-        data = UserDoc.objects(username=user_data).first()
-        return data
+        get_user_data = UserDoc.objects(username=user_data).first()
+        return get_user_data
+
+
+    def UpdatePassword(self, user_data, json_data):
+        get_user_data = UserDoc.objects(username=user_data).first()
+        if get_user_data is not None and get_user_data.VerifyPassword(json_data['old_password']):
+            new_password_hash = get_user_data.UpdatePassword(json_data['new_password'])
+            user_data = UserDoc.objects(username=user_data).update(password_hash=new_password_hash)
+            message_object = {
+                "status":"Berhasil",
+                "message":"Password Berhasil di perbarui"
+            }
+            return message_object
+        else:
+            message_object = {
+                "status":"Gagal",
+                "message":"Terjadi kesalahan"
+            }
+            return message_object
 
     def GetUserHistoryTx(self, user_data):
         user = UserDoc.objects(username=user_data).first()
