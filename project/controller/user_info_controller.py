@@ -47,6 +47,15 @@ update_password_model = api.model(
         "new_password":fields.String(require=True)
     }
 )
+
+user_history_model = api.model(
+    "History Data",
+    {
+        "tx_hash": fields.String(attribute="tx_hash"),
+        "signature": fields.String(attribute="signature_data"),
+    },
+)
+
 message_object = api.model(
     "Message Object Model",
     {
@@ -69,3 +78,22 @@ class UpdatePassword(Resource):
             return result
         else:
             api.abort(400, result)
+
+@api.route("/info")
+class UserInfo(Resource):
+    @jwt_required()
+    @api.doc(responses={200:"OK", 400:"Bad Request"})
+    @api.marshal_with(user_info_model, envelope="data")
+    def get(self):
+        user_data = get_jwt()['sub']
+        result = us.GetUserInfo(user_data)
+        return result
+
+@api.route("/riwayat")
+class GetUserTxHistory(Resource):
+    @jwt_required()
+    @api.marshal_list_with(user_history_model, envelope="data")
+    def get(self):
+        user_data = get_jwt()["sub"]
+        result = us.GetUserHistoryTx(user_data)
+        return result

@@ -1,3 +1,4 @@
+from werkzeug.exceptions import NotFound
 from project.models.user_model import UserDoc, UserTxHistoryDoc
 from project.service.enkripsi_service import DataEncryption
 from project.service.ethereum_service import EthereumService
@@ -8,8 +9,9 @@ es = EthereumService()
 
 class UserInfo:
     def GetUserInfo(self, user_data):
-        get_user_info = UserDoc.objects(username=user_data).first()
-        return get_user_info
+        get_user_data = UserDoc.objects(username=user_data).first()
+        return get_user_data
+
 
     def UpdatePassword(self, user_data, json_data):
         get_user_data = UserDoc.objects(username=user_data).first()
