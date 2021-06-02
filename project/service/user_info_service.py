@@ -11,20 +11,20 @@ class UserInfo:
         get_user_info = UserDoc.objects(username=user_data).first()
         return get_user_info
 
-    def UpdateDefaultPassword(self, user_data, new_password):
-        get_user_data = UserDoc.obbjects(username=user_data).first()
-        new_password_user = get_user_data.UpdatePassword(new_password)
-        try:
-            update_user_data = UserDoc.objects(
-                username=user_data
-            ).update(password_hash=new_password_user)
-        except Exception as e:
-            message_object = {"status": "Error", "message": e}
+    def UpdatePassword(self, user_data, json_data):
+        get_user_data = UserDoc.objects(username=user_data).first()
+        if get_user_data is not None and get_user_data.VerifyPassword(json_data['old_password']):
+            new_password_hash = get_user_data.UpdatePassword(json_data['new_password'])
+            user_data = UserDoc.objects(username=user_data).update(password_hash=new_password_hash)
+            message_object = {
+                "status":"Berhasil",
+                "message":"Password Berhasil di perbarui"
+            }
             return message_object
         else:
             message_object = {
-                "status": "Berhasil",
-                "message": "User berhasil memperbarui data password",
+                "status":"Gagal",
+                "message":"Terjadi kesalahan"
             }
             return message_object
 
