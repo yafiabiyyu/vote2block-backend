@@ -49,30 +49,54 @@ single_petugas_data = api.model(
     },
 )
 
+message_object = api.model(
+    "Message Object Model",
+    {"status": fields.String, "message": fields.String},
+)
+
+voting_timestamp_model = api.model(
+    "Model Untuk Timestamp Voting & Register",
+    {
+        "registerstart": fields.String(required=True),
+        "registerfinis": fields.String(required=True),
+        "votingstart": fields.String(require=True),
+        "votingfinis": fields.String(require=True)
+    }
+)
+
 
 @api.route("/manage/petugas")
 class ManagePetugas(Resource):
     @jwt_required()
+    @api.marshal_with(message_object)
+    @api.doc(responses={200: "OK", 400: "Error"})
     def post(self):
         user_data = get_jwt()["sub"]
         json_data = request.json
-        result = ks.AddPetugas(json_data, user_data)
+        result = ks.RegisterPetugas(json_data, user_data)
         if (
             result["status"] == "Berhasil"
             or result["status"] == "Gagal"
         ):
-            return jsonify(result)
+            return result
         else:
-            api.abort(400, result["message"])
+            api.abort(400, result)
 
     @jwt_required()
     @api.marshal_list_with(all_petugas_data_model, envelope="data")
+    @api.doc(responses={200: "OK", 500: "Internal Server Error"})
     def get(self):
         try:
-            data = ks.GetAllPetugas()
+            data = ks.GetAllPetugasData()
+            if data == "Abort":
+                raise Exception
             return data
         except Exception as e:
-            api.abort(400, e)
+            message_object = {
+                "status": "Error",
+                "message": "Terjadi kesalahan pada server",
+            }
+            api.abort(500, message_object)
 
 
 @api.route("/manage/petugas/<petugasId>")
@@ -81,7 +105,7 @@ class ManageSinglePetugas(Resource):
     @marshal_with(single_petugas_data, envelope="data")
     def get(self, petugasId):
         try:
-            result = ks.GetOnePetugas(petugasId)
+            result = ks.GetSinglePetugasData(petugasId)
             return result
         except Exception as e:
             api.abort(400, e)
@@ -90,8 +114,11 @@ class ManageSinglePetugas(Resource):
     def delete(self, petugasId):
         user_data = get_jwt()["sub"]
         result = ks.RemovePetugas(petugasId, user_data)
-        if result["status"] == "Berhasil":
-            return jsonify(result)
+        if (
+            result["status"] == "Berhasil"
+            or result["status"] == "Gagal"
+        ):
+            return result
         else:
             api.abort(500, result["message"])
 
@@ -99,10 +126,11 @@ class ManageSinglePetugas(Resource):
 @api.route("/manage/voting/schedule")
 class ManageSchedule(Resource):
     @jwt_required()
+    @api.expect(voting_timestamp_model)
     def post(self):
         user_data = get_jwt()["sub"]
         json_data = request.json
-        result = ks.VotingTimeStampSet(json_data, user_data)
+        result = ks.SetupVotingAndRegisterTime(json_data, user_data)
         if (
             result["status"] == "Berhasil"
             or result["status"] == "Gagal"
