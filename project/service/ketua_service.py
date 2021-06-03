@@ -1,6 +1,7 @@
 from project.tasks.tasks import (
     RemovePetugasFromContract,
     SavePetugasToContract,
+    SetVotingTimeStamp
 )
 from eth_account.messages import encode_defunct
 from web3.exceptions import SolidityError
@@ -174,3 +175,52 @@ class KetuaService:
     def GetSinglePetugasData(self, petugasId):
         petugas_data = UserDoc.objects(id=str(petugasId)).first()
         return petugas_data
+    
+    def SetupVotingAndRegisterTime(self, json_data, user_data):
+        w3 = es.SetupW3()
+        ketua_address, ketua_access = us.GetUserData(user_data)
+        try:
+            msg = w3.soliditySha3(
+                ['uint256','uint256','uint256','uint256'],
+                [
+                    int(json_data['registerstart']),
+                    int(json_data['registerfinis']),
+                    int(json_data['votingstart']),
+                    int(json_data['votingfinis'])
+                ]
+            )
+            message = encode_defunct(primitive=msg)
+            sign_message = w3.eth.account.sign_message(message,ketua_access)
+            result = SetVotingTimeStamp.delay(
+                int(json_data['registerstart']),
+                int(json_data['registerfinis']),
+                int(json_data['votingstart']),
+                int(json_data['votingfinis']),
+                sign_message.signature.hex()
+            )
+            if result == "Gagal":
+                raise SolidityError
+        except SolidityError:
+            message_object = {
+                "status":"Error",
+                "message":"Terjadi kesalahan pada server"
+            }
+            return message_object
+        else:
+            save_timestamp = VotingTimeStamp(
+                register_start=json_data['registerstart'],
+                register_finis = json_data['registerfinis'],
+                voting_start = json_data['votingstart'],
+                voting_finis = json_data['votingfinis']
+            )
+            save_timestamp.save()
+            us.SaveUserTx(
+                user_data,
+                result.wait(),
+                sign_message.signature.hex()
+            )
+            message_object = {
+                "status":"Berhasil",
+                "message":"Waktu register dan voting berhasil di simpan"
+            }
+            return message_object

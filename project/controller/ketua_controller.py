@@ -54,6 +54,16 @@ message_object = api.model(
     {"status": fields.String, "message": fields.String},
 )
 
+voting_timestamp_model = api.model(
+    "Model Untuk Timestamp Voting & Register",
+    {
+        "registerstart": fields.String(required=True),
+        "registerfinis": fields.String(required=True),
+        "votingstart": fields.String(require=True),
+        "votingfinis": fields.String(require=True)
+    }
+)
+
 
 @api.route("/manage/petugas")
 class ManagePetugas(Resource):
@@ -116,10 +126,11 @@ class ManageSinglePetugas(Resource):
 @api.route("/manage/voting/schedule")
 class ManageSchedule(Resource):
     @jwt_required()
+    @api.expect(voting_timestamp_model)
     def post(self):
         user_data = get_jwt()["sub"]
         json_data = request.json
-        result = ks.VotingTimeStampSet(json_data, user_data)
+        result = ks.SetupVotingAndRegisterTime(json_data, user_data)
         if (
             result["status"] == "Berhasil"
             or result["status"] == "Gagal"

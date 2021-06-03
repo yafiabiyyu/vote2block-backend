@@ -21351,10 +21351,167 @@
       "links": {},
       "address": "0xB94f61D46fDe5Bbd2C510fb22F880CF495184f72",
       "transactionHash": "0x4f3f64d5a317d80994ffac7ebc720f49ef53934bc8dce3bd7266de4f43e43e52"
+    },
+    "1622746681340": {
+      "events": {
+        "0xc66bcbe13027ad75e39e0c01012b117bd4090ec89074d6e87c1a0a9692685e51": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_kandidatID",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_totalVote",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "bytes32",
+              "name": "_kandidatName",
+              "type": "bytes32"
+            },
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "sender",
+              "type": "address"
+            }
+          ],
+          "name": "RegisterKandidat",
+          "type": "event"
+        },
+        "0xf6c373ebb5e124f37b69b5a212cad0416b17b14d64363002e2cb265e2bf2622e": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "_pemilihAddress",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_statusHakpilih",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "bool",
+              "name": "statusVoting",
+              "type": "bool"
+            }
+          ],
+          "name": "RegisterPemilih",
+          "type": "event"
+        },
+        "0xa623da1696ed3a0de2a4db6fecd00b894fd4a8e223dfccafa18926ffd38e774e": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "_petugasAddress",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "sender",
+              "type": "address"
+            }
+          ],
+          "name": "RegisterPetugas",
+          "type": "event"
+        },
+        "0xa392307238e13b99e8ce5c88475b32d69c121390323cc9010a32ab43617b1046": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "_petugasAddress",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "sender",
+              "type": "address"
+            }
+          ],
+          "name": "RemovePetugas",
+          "type": "event"
+        },
+        "0x749addf8eadeff63c43be59c27331be5c6d4fc9e82bbfbcf162321c9b35a95b4": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "voter",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "kandidatID",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "bool",
+              "name": "statusVoting",
+              "type": "bool"
+            }
+          ],
+          "name": "Voted",
+          "type": "event"
+        },
+        "0xa941a8d45e5f36c4ad6d384f5e93877fc58e6952e792a606b179587d1f6c32e1": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "startRegister",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "finisRegister",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "startVoting",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "finisVoting",
+              "type": "uint256"
+            }
+          ],
+          "name": "VotingTimeSet",
+          "type": "event"
+        }
+      },
+      "links": {},
+      "address": "0x3b6ec5570684B5c64a9e860C387c8f83019Ff4B3",
+      "transactionHash": "0x86b300fbdcd256e005bd371bcbb71e85017d789471e32c718e516c3aa2be8198"
     }
   },
   "schemaVersion": "3.3.3",
-  "updatedAt": "2021-06-02T19:22:01.094Z",
+  "updatedAt": "2021-06-03T19:07:26.116Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",
