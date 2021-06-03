@@ -16,6 +16,7 @@ def SavePetugasToContract(admin_address, signature, ketua_nonce):
     main_acc_address = w3.eth.account.privateKeyToAccount(
         main_acc_access
     ).address
+    w3.eth.defaultAccount = main_acc_address
     main_nonce = w3.eth.getTransactionCount(
         w3.toChecksumAddress(main_acc_address)
     )
@@ -30,8 +31,11 @@ def SavePetugasToContract(admin_address, signature, ketua_nonce):
         }
     )
     sign_tx = w3.eth.account.sign_transaction(tx_hash, main_acc_access)
-    w3.eth.sendRawTransaction(sign_tx.rawTransaction)
-    return w3.toHex(w3.keccak(sign_tx.rawTransaction))
+    try:
+        w3.eth.sendRawTransaction(sign_tx.rawTransaction)
+        return w3.toHex(w3.keccak(sign_tx.rawTransaction))
+    except Exception:
+        return "Gagal"
 
 
 @celery.task
@@ -54,8 +58,11 @@ def RemovePetugasFromContract(admin_address, signature, ketua_nonce):
         }
     )
     sign_tx = w3.eth.account.sign_transaction(tx_hash, main_acc_access)
-    w3.eth.sendRawTransaction(sign_tx.rawTransaction)
-    return w3.toHex(w3.keccak(sign_tx.rawTransaction))
+    try:
+        w3.eth.sendRawTransaction(sign_tx.rawTransaction)
+        return w3.toHex(w3.keccak(sign_tx.rawTransaction))
+    except Exception:
+        return "Gagal"
 
 
 @celery.task

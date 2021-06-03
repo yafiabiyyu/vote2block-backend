@@ -1,16 +1,17 @@
+from project.tasks.tasks import (
+    RemovePetugasFromContract,
+    SavePetugasToContract,
+)
+from eth_account.messages import encode_defunct
+from web3.exceptions import SolidityError
+from celery.result import AsyncResult
+from datetime import datetime
 from project.models.user_model import UserDoc
 from project.models.voting_model import VotingTimeStamp
 from project.service.enkripsi_service import DataEncryption
 from project.service.ethereum_service import EthereumService
 from project.service.user_info_service import UserInfo
-from project.tasks.tasks import (
-    SavePetugasToContract,
-    RemovePetugasFromContract,
-    SetVotingTimeStamp,
-)
-from eth_account.messages import encode_defunct
-from celery.result import AsyncResult
-from datetime import datetime
+
 
 de = DataEncryption()
 es = EthereumService()
@@ -22,49 +23,54 @@ class KetuaService:
         username = data.replace(" ", "")
         return username.lower()
 
-    def AddPetugas(self, json_data, user_data):
+    def RegisterPetugas(self, json_data, user_data):
         w3 = es.SetupW3()
-        petugas_address, petugas_access = es.CreateWallet()
+        # mengambil ethereum address dan ethereum access ketua pelaksana
         ketua_address, ketua_access = us.GetUserData(user_data)
-        petugas_data = UserDoc.objects(
+        user_address, user_access = es.CreateWallet()
+        check_petugas_data = UserDoc.objects(
             nama_lengkap=json_data["nama_lengkap"]
         ).first()
-        username = self.GenerateUsername(json_data["nama_lengkap"])
-        access = {"level": "petugas", "status": "aktif"}
-        if petugas_data is None:
+        if check_petugas_data is None:
             try:
-                save_petugas = UserDoc(
-                    username=username,
-                    nama_lengkap=json_data["nama_lengkap"],
-                    contact=json_data["contact"],
-                    alamat=json_data["alamat"],
-                    access=access,
-                    ethereum={
-                        "ethereum_address": petugas_address,
-                        "ethereum_access": petugas_access.decode(),
-                    },
-                )
-                save_petugas.GeneratePasswordHash(username)
-                save_petugas.save()
-
-                # create signature message
-                ketua_nonce = w3.eth.getTransactionCount(ketua_address)
+                nonce = w3.eth.getTransactionCount(ketua_address)
                 msg = w3.soliditySha3(
-                    ["address", "uint256"],
-                    [
-                        w3.toChecksumAddress(petugas_address),
-                        ketua_nonce,
-                    ],
+                    ["address", "uint256"], [user_address, nonce]
                 )
                 message = encode_defunct(primitive=msg)
                 sign_message = w3.eth.account.sign_message(
                     message, ketua_access
                 )
                 result = SavePetugasToContract.delay(
-                    w3.toChecksumAddress(petugas_address),
+                    w3.toChecksumAddress(user_address),
                     sign_message.signature.hex(),
-                    ketua_nonce,
+                    nonce,
                 )
+                if result.wait() == "Gagal":
+                    raise SolidityError
+            except SolidityError as e:
+                message_object = {
+                    "status": "Error",
+                    "message": "Terjadi Error Pada sistem",
+                }
+                return message_object
+            else:
+                username = self.GenerateUsername(
+                    json_data["nama_lengkap"]
+                )
+                save_new_user = UserDoc(
+                    username=username,
+                    nama_lengkap=json_data["nama_lengkap"],
+                    contact=json_data["contact"],
+                    alamat=json_data["alamat"],
+                    access={"level": "petugas", "status": "aktif"},
+                    ethereum={
+                        "ethereum_address": user_address,
+                        "ethereum_access": user_access.decode(),
+                    },
+                )
+                save_new_user.GeneratePasswordHash(username)
+                save_new_user.save()
                 us.SaveUserTx(
                     user_data,
                     result.wait(),
@@ -72,48 +78,37 @@ class KetuaService:
                 )
                 message_object = {
                     "status": "Berhasil",
-                    "message": "Petugas {} berhasil ditambahkan".format(
-                        json_data["nama_lengkap"]
-                    ),
+                    "message": "Petugas berhasil ditambahkan kedalam sistem",
                 }
-                return message_object
-            except Exception as e:
-                message_object = {"status": "Error", "message": e}
                 return message_object
         else:
             message_object = {
                 "status": "Gagal",
-                "message": "Pengguna {} telah terdaftar".format(
-                    json_data["nama_lengkap"]
-                ),
+                "message": "Petugas telah terdaftar di dalam sistem",
             }
             return message_object
 
     def RemovePetugas(self, petugasId, user_data):
         w3 = es.SetupW3()
         ketua_address, ketua_access = us.GetUserData(user_data)
-        get_petugas_data = UserDoc.objects(id=str(petugasId)).first()
-        access = {"level": "None", "status": "nonaktif"}
-        if get_petugas_data.access["status"] == "aktif":
+        get_petugas_dataByID = UserDoc.objects(
+            id=str(petugasId)
+        ).first()
+        if (
+            get_petugas_dataByID is not None
+            and get_petugas_dataByID.access["status"] == "aktif"
+        ):
             try:
-                # update access petugas menjadi nonaktif
-                remove_admin = UserDoc.objects(
-                    id=str(petugasId)
-                ).update(access=access)
-
-                # membuat signature message menghapus petugas dari smartcontract
-                ketua_nonce = w3.eth.getTransactionCount(
-                    w3.toChecksumAddress(ketua_address)
-                )
+                nonce = w3.eth.getTransactionCount(ketua_address)
                 msg = w3.soliditySha3(
                     ["address", "uint256"],
                     [
                         w3.toChecksumAddress(
-                            get_petugas_data.ethereum[
+                            get_petugas_dataByID.ethereum[
                                 "ethereum_address"
                             ]
                         ),
-                        ketua_nonce,
+                        nonce,
                     ],
                 )
                 message = encode_defunct(primitive=msg)
@@ -122,111 +117,60 @@ class KetuaService:
                 )
                 result = RemovePetugasFromContract.delay(
                     w3.toChecksumAddress(
-                        get_petugas_data.ethereum["ethereum_address"]
+                        get_petugas_dataByID.ethereum[
+                            "ethereum_address"
+                        ]
                     ),
                     sign_message.signature.hex(),
-                    ketua_nonce,
+                    nonce,
                 )
+                if result.wait() == "Gagal":
+                    raise SolidityError
+            except SolidityError:
+                message_object = {
+                    "status": "Error",
+                    "message": "Terjadi Error Pada sistem",
+                }
+                return message_object
+            else:
+                remove_petugas = UserDoc.objects(
+                    id=str(petugasId)
+                ).update(access={"level": "None", "status": "nonaktif"})
                 us.SaveUserTx(
                     user_data,
                     result.wait(),
-                    sign_message.signature.hex(),
+                    sign_message.signature.hex()
                 )
                 message_object = {
-                    "status": "Berhasil",
-                    "message": "Petugas {} berhasil di hapus".format(
-                        get_petugas_data.nama_lengkap
-                    ),
+                    "status":"Berhasil",
+                    "message":"Petugas berhasil di hapus dari sistem"
                 }
                 return message_object
-            except Exception as e:
-                message_object = {"status": "Error", "message": e}
         else:
             message_object = {
-                "status": "Gagal",
-                "message": "Petugas {} tidak terdaftar dalam sistem".format(
-                    get_petugas_data.nama_lengkap
-                ),
+                "status":"Gagal",
+                "message":"Petugas dengan ID {} tidak ditemukan".format(petugasId)
             }
             return message_object
-
-    def GetAllPetugas(self):
+    
+    def GetAllPetugasData(self):
         try:
-            data_list = []
-            data = UserDoc.objects(
-                access={"level": "petugas", "status": "aktif"}
-            ).all()
-            for user in data:
-                data_list.append(
+            list_petugas_data = []
+            petugas_data = UserDoc.objects(access={"level":"petugas","status":"aktif"}).all()
+            for user in petugas_data:
+                list_petugas_data.append(
                     {
-                        "id": user.id,
-                        "nama_lengkap": user.nama_lengkap,
-                        "status": user.access["status"],
-                        "level": user.access["level"],
-                        "ethereum_address": user.ethereum[
-                            "ethereum_address"
-                        ],
+                        "id":user.id,
+                        "nama_lengkap":user.nama_lengkap,
+                        "status":user.access['status'],
+                        "level":user.access['level'],
+                        "ethereum_address":user.ethereum['ethereum_address']
                     }
                 )
-            return data_list
+            return list_petugas_data
         except Exception as e:
-            message_object = {"status": "Error", "message": e}
-            return e
-
-    def GetOnePetugas(self, petugasId):
-        user = UserDoc.objects(id=str(petugasId)).first()
-        return user
-
-    def VotingTimeStampSet(self, json_data, user_data):
-        w3 = es.SetupW3()
-        ketua_address, ketua_access = us.GetUserData(user_data)
-        user = UserDoc.objects(username=user_data).first()
-        if user.access["level"] == "ketua":
-            try:
-                set_timestamp = VotingTimeStamp(
-                    register_start=json_data["register_start"],
-                    register_finis=json_data["register_finis"],
-                    voting_start=json_data["voting_start"],
-                    voting_finis=json_data["voting_finis"],
-                )
-                set_timestamp.save()
-                # set save timestamp to smart-contract
-                msg = w3.soliditySha3(
-                    ["uint256", "uint256", "uint256", "uint256"],
-                    [
-                        int(json_data["register_start"]),
-                        int(json_data["register_finis"]),
-                        int(json_data["voting_start"]),
-                        int(json_data["voting_finis"]),
-                    ],
-                )
-                message = encode_defunct(primitive=msg)
-                sign_message = w3.eth.account.sign_message(
-                    message, ketua_access
-                )
-                result = SetVotingTimeStamp.delay(
-                    int(json_data["register_start"]),
-                    int(json_data["register_finis"]),
-                    int(json_data["voting_start"]),
-                    int(json_data["voting_finis"]),
-                    sign_message.signature.hex(),
-                )
-                us.SaveUserTx(
-                    user_data,
-                    result.wait(),
-                    sign_message.signature.hex(),
-                )
-                message_object = {
-                    "status": "Berhasil",
-                    "message": "Waktu berhasil di setup",
-                }
-                return message_object
-            except Exception as e:
-                message_object = {"status": "Error", "message": e}
-                return message_object
-        else:
-            message_object = {
-                "status": "Gagal",
-                "message": "Anda tidak memiliki akses",
-            }
-            return message_object
+            return "Abort"
+    
+    def GetSinglePetugasData(self, petugasId):
+        petugas_data = UserDoc.objects(id=str(petugasId)).first()
+        return petugas_data

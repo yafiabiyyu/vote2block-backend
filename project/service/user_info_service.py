@@ -40,6 +40,7 @@ class UserInfo:
     def GetUserData(self, user_data):
         data = UserDoc.objects(username=user_data).first()
         user_address = data.ethereum["ethereum_address"]
+        print(data.username)
         user_access = de.Decrypting(
             data.ethereum["ethereum_access"].encode()
         )
