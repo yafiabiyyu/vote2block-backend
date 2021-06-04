@@ -14,3 +14,4 @@ class Kandidat(db.Document):
     nama_bytes = db.StringField(required=True)
     alamat = db.DictField(require=True)
     contact = db.DictField(required=True)
+    image_url = db.StringField(required=True)
