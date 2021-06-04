@@ -127,5 +127,8 @@ def RegisterKandidat(kandidatId, nonce, bytes_name, signature):
         }
     )
     sign_tx = w3.eth.account.sign_transaction(tx_hash.rawTransaction)
-    w3.eth.sendRawTransaction(sign_tx, main_acc_access)
-    return w3.toHex(w3.keccak(sign_tx.rawTransaction))
+    try:
+        w3.eth.sendRawTransaction(sign_tx, main_acc_access)
+        return w3.toHex(w3.keccak(sign_tx.rawTransaction))
+    except Exception:
+        return "Gagal"
