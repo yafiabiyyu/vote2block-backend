@@ -31,14 +31,27 @@ message_object = api.model(
     }
 )
 
-@api.route("/login")
-class LoginResource(Resource):
+@api.route("/login/petugas")
+class LoginResourcePetugas(Resource):
     @api.doc(responses={200:"OK", 404:"User not found"})
     @api.expect(auth_model)
     @api.marshal_with(message_object)
     def post(self):
         user_data = request.json
-        result = auth.LoginService(user_data)
+        result = auth.LoginServicePetugas(user_data)
+        if result['status'] == "Berhasil" or result['status'] == "Gagal":
+            return result
+        else:
+            api.abort(404, result)
+
+@api.route("/login/pemilih")
+class LoginResourcePemilih(Resource):
+    @api.doc(responses={200:"OK", 404:"User not found"})
+    @api.expect(auth_model)
+    @api.marshal_with(message_object)
+    def post(self):
+        user_data = request.json
+        result = auth.LoginServicePemilih(user_data)
         if result['status'] == "Berhasil" or result['status'] == "Gagal":
             return result
         else:
