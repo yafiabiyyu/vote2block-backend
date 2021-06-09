@@ -5,13 +5,6 @@ from werkzeug.security import (
 from project.factory import db
 
 
-class VotingTimeStamp(db.Document):
-    register_start = db.StringField(required=True)
-    register_finis = db.StringField(required=True)
-    voting_start = db.StringField(required=True)
-    voting_finis = db.StringField(required=True)
-
-
 class Kandidat(db.Document):
     nomor_urut = db.IntField(required=True)
     nama_kandidat = db.StringField(required=True)
@@ -39,3 +32,9 @@ class Pemilih(db.Document):
         return check_password_hash(
             pwhash = self.password_hash, password=password
         )
+
+
+class PemilihTxHistoryDoc(db.Document):
+    user_data = db.ReferenceField("Pemilih")
+    tx_hash = db.StringField(required=True)
+    signature_data = db.StringField(required=True)
