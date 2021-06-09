@@ -21,8 +21,8 @@ register_kandiat_model = api.model(
     {
         "nomor_urut": fields.Integer(required=True),
         "nama_kandidat": fields.String(required=True),
-        "alamat": fields.Nested(alamat, required=True),
         "contact": fields.Nested(contact, required=True),
+        "alamat": fields.Nested(alamat, required=True),
         "image_url": fields.String(required=True),
     },
 )

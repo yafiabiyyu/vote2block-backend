@@ -1,13 +1,16 @@
 from project.models.voting_model import (
     Kandidat,
-    VotingTimeStamp,
-    Pemilih,
+    Pemilih
 )
 from project.service.ethereum_service import EthereumService
 from web3.exceptions import SolidityError
-from project.service.user_info_service import UserInfo
+from project.service.penyelenggara_info_service import UserInfo
 from eth_account.messages import encode_defunct
-from project.tasks.tasks import RegisterKandidat, RegisterPemilih
+from project.tasks.tasks import (
+    RegisterKandidatTask,
+    RegisterPemilihTask,
+    GetTimestampDataTask
+)
 import time
 
 es = EthereumService()
@@ -26,17 +29,21 @@ class PetugasService:
 
     def CheckRegisterTIme(self):
         current_timestamp = time.time()
-        get_timestamp_data = VotingTimeStamp.objects().first()
-        print(int(current_timestamp))
-        if int(current_timestamp) < int(get_timestamp_data.register_start):
+        data = GetTimestampDataTask.delay()
+        timestamp_data = data.get()
+
+        if int(current_timestamp) < int(
+            timestamp_data[0]
+        ):
             message_object = {
                 "status": "Gagal",
                 "message": "Pendaftaran Kandidat dan Pemilih belum dibuka",
             }
             return message_object
-        elif (
-            int(current_timestamp) > int(get_timestamp_data.register_start)
-            and int(current_timestamp) < int(get_timestamp_data.register_finis)
+        elif int(current_timestamp) > int(
+            timestamp_data[0]
+        ) and int(current_timestamp) < int(
+            timestamp_data[1]
         ):
             message_object = {
                 "status": "Berhasil",
@@ -57,7 +64,7 @@ class PetugasService:
         check_kandidat_data = Kandidat.objects(
             nama_kandidat=json_data["nama_kandidat"]
         ).first()
-        if check_register_time['status'] == "Berhasil":
+        if check_register_time["status"] == "Berhasil":
             if check_kandidat_data is None:
                 try:
                     nonce = w3.eth.getTransactionCount(petugas_address)
@@ -78,7 +85,7 @@ class PetugasService:
                     sign_message = w3.eth.account.sign_message(
                         message, petugas_access
                     )
-                    result = RegisterKandidat.delay(
+                    result = RegisterKandidatTask.delay(
                         int(json_data["nomor_urut"]),
                         nonce,
                         bytes_kandidat_name,
@@ -103,7 +110,9 @@ class PetugasService:
                     )
                     save_kandidat.save()
                     us.SaveUserTx(
-                        user_data, result.wait(), sign_message.signature.hex()
+                        user_data,
+                        result.wait(),
+                        sign_message.signature.hex(),
                     )
                     message_object = {
                         "status": "Berhasil",
@@ -124,48 +133,65 @@ class PetugasService:
         petugas_address, petugas_access = us.GetUserData(user_data)
         check_register_time = self.CheckRegisterTIme()
         pemilih_address, pemilih_access = es.CreateWallet()
-        check_pemilih_data = Pemilih.objects(_id=str(json_data['pemilih_id'])).first()
-        if check_register_time['status'] == "Berhasil":
+        check_pemilih_data = Pemilih.objects(
+            _id=str(json_data["pemilih_id"])
+        ).first()
+        if check_register_time["status"] == "Berhasil":
             if check_pemilih_data is None:
                 try:
                     nonce = w3.eth.getTransactionCount(petugas_address)
-                    msg = w3.soliditySha3(['address','uint256'],[pemilih_address,nonce])
+                    msg = w3.soliditySha3(
+                        ["address", "uint256"], [pemilih_address, nonce]
+                    )
                     message = encode_defunct(primitive=msg)
-                    sign_message = w3.eth.account.sign_message(message,petugas_access)
-                    result = RegisterPemilih.delay(nonce, pemilih_address, sign_message.signature.hex())
+                    sign_message = w3.eth.account.sign_message(
+                        message, petugas_access
+                    )
+                    result = RegisterPemilihTask.delay(
+                        nonce,
+                        pemilih_address,
+                        sign_message.signature.hex(),
+                    )
                     if result == "Gagal":
                         raise SolidityError
                 except SolidityError:
                     message_object = {
-                        "status":"Error",
-                        "message":"Terjadi kesalaha pada server"
+                        "status": "Error",
+                        "message": "Terjadi kesalaha pada server",
                     }
                     return message_object
                 else:
                     save_pemilih_data = Pemilih(
-                        _id = json_data['pemilih_id'],
-                        nama_lengkap=json_data['nama_lengkap'],
-                        username=self.GenerateUsername(json_data['nama_lengkap']),
-                        contact = json_data['contact'],
-                        alamat = json_data['alamat'],
-                        ethereum={"ethereum_address":pemilih_address,"ethereum_access":pemilih_access.decode()}
+                        _id=json_data["pemilih_id"],
+                        nama_lengkap=json_data["nama_lengkap"],
+                        username=self.GenerateUsername(
+                            json_data["nama_lengkap"]
+                        ),
+                        contact=json_data["contact"],
+                        alamat=json_data["alamat"],
+                        ethereum={
+                            "ethereum_address": pemilih_address,
+                            "ethereum_access": pemilih_access.decode(),
+                        },
                     )
-                    save_pemilih_data.GeneratePasswordHash(self.GenerateUsername(json_data['nama_lengkap']))
+                    save_pemilih_data.GeneratePasswordHash(
+                        self.GenerateUsername(json_data["nama_lengkap"])
+                    )
                     save_pemilih_data.save()
                     us.SaveUserTx(
                         user_data,
                         result.wait(),
-                        sign_message.signature.hex()
+                        sign_message.signature.hex(),
                     )
                     message_object = {
-                        "status":"Berhasil",
-                        "message":"Pemilih berhasil di tambahkan di dalam sistem"
+                        "status": "Berhasil",
+                        "message": "Pemilih berhasil di tambahkan di dalam sistem",
                     }
                     return message_object
             else:
                 message_object = {
-                    "status":"Gagal",
-                    "message":"Pemilih telah terdaftar di dalam sistem"
+                    "status": "Gagal",
+                    "message": "Pemilih telah terdaftar di dalam sistem",
                 }
                 return message_object
         else:
