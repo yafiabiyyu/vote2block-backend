@@ -32,9 +32,10 @@ class AuthService:
                     "message": "User berhasil login",
                     "data": {
                         "access_token": access_token,
-                        "refresh_token": access_token,
+                        "refresh_token": refresh_token,
                     },
                 }
+                return message_object
             else:
                 message_object = {
                     "status": "Gagal",
@@ -71,7 +72,7 @@ class AuthService:
                 "message": "User berhasil login",
                 "data": {
                     "access_token": access_token,
-                    "refresh_token": access_token,
+                    "refresh_token": refresh_token,
                 },
             }
             return message_object
