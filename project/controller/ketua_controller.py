@@ -41,11 +41,11 @@ single_petugas_data = api.model(
     "Single Petugas Data",
     {
         "nama_lengkap": fields.String,
-        "username": fields.String,
+        "username": fields.String(readonly=True),
         "contact": fields.Nested(contact),
         "alamat": fields.Nested(alamat),
         "access": fields.Nested(access),
-        "ethereum": fields.Nested(ethereum),
+        "ethereum": fields.Nested(ethereum, readonly=True),
     },
 )
 
@@ -69,6 +69,7 @@ voting_timestamp_model = api.model(
 class ManagePetugas(Resource):
     @jwt_required()
     @api.marshal_with(message_object)
+    @api.expect(single_petugas_data)
     @api.doc(responses={200: "OK", 400: "Error"})
     def post(self):
         user_data = get_jwt()["sub"]
@@ -94,7 +95,7 @@ class ManagePetugas(Resource):
         except Exception as e:
             message_object = {
                 "status": "Error",
-                "message": "Terjadi kesalahan pada server",
+                "message": e
             }
             api.abort(500, message_object)
 
