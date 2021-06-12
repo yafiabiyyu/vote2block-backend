@@ -34,16 +34,35 @@ pemilih_data_model = api.model(
 kandidat_data_model = api.model(
     "Model untuk data kandidat",
     {
-        "kandidat_id":fields.String(required=True),
-        "nomor_urut":fields.Integer(rquired=True),
-        "nama_kandidat":fields.String(required=True),
-        "tanggal_lahir":fields.String(required=True),
-        "visi":fields.String(required=True),
-        "misi":fields.String(required=True),
-        "contact":fields.Nested(contact, required=True),
-        "alamat":fields.Nested(alamat),
-        "image_url":fields.String(required=True)
-    }
+        "kandidat_id": fields.String(required=True),
+        "nomor_urut": fields.Integer(rquired=True),
+        "nama_kandidat": fields.String(required=True),
+        "tanggal_lahir": fields.String(required=True),
+        "visi": fields.String(required=True),
+        "misi": fields.String(required=True),
+        "contact": fields.Nested(contact, required=True),
+        "alamat": fields.Nested(alamat),
+        "image_url": fields.String(required=True),
+    },
+)
+
+all_pemilih_data = api.model(
+    "Model untuk seluruh data pemilih",
+    {
+        "id": fields.String(readonly=True),
+        "nama_lengkap": fields.String(readonly=True),
+        "tanggal_lahir": fields.String(readonly=True),
+    },
+)
+
+all_kandidat_data = api.model(
+    "Model untuk seluruh data kandidat",
+    {
+        "id": fields.String(readonly=True),
+        "nomor_urut": fields.Integer(readonly=True),
+        "nama": fields.String(readonly=True),
+        "tanggal_lahir": fields.String(readonly=True),
+    },
 )
 
 
@@ -73,7 +92,10 @@ class SetupTimeController(Resource):
         user_data = get_jwt()["sub"]
         data = request.json
         result = adminservice.SetupTimeData(data, user_data)
-        if result["status"] == "Berhasil" or result['status'] == "Gagal":
+        if (
+            result["status"] == "Berhasil"
+            or result["status"] == "Gagal"
+        ):
             return result
         else:
             api.abort(500, result)
@@ -89,7 +111,10 @@ class PemilihConntroller(Resource):
         user_data = get_jwt()["sub"]
         data = request.json
         result = adminservice.RegisterPemilih(data, user_data)
-        if result["status"] == "Berhasil" or result['status'] == "Gagal":
+        if (
+            result["status"] == "Berhasil"
+            or result["status"] == "Gagal"
+        ):
             return result
         else:
             api.abort(500, result)
@@ -98,14 +123,55 @@ class PemilihConntroller(Resource):
 @api.route("/pendaftaran/kandidat")
 class KandidatController(Resource):
     @jwt_required()
-    @api.doc(responses={200:"OK", 500:"Internal Server Error"})
+    @api.doc(responses={200: "OK", 500: "Internal Server Error"})
     @api.marshal_with(message_object_model)
     @api.expect(kandidat_data_model)
     def post(self):
-        user_data = get_jwt()['sub']
+        user_data = get_jwt()["sub"]
         data = request.json
         result = adminservice.RegisterKandidat(data, user_data)
-        if result['status'] == "Berhasil" or result['status'] == "Gagal":
+        if (
+            result["status"] == "Berhasil"
+            or result["status"] == "Gagal"
+        ):
             return result
         else:
             api.abort(500, result)
+
+
+@api.route("/data/pemilih")
+class DataPemilih(Resource):
+    @jwt_required()
+    @api.doc(responses={200: "OK", 500: "Internal Server Error"})
+    @api.marshal_list_with(all_pemilih_data)
+    def get(self):
+        result = adminservice.GetAllPemilihData()
+        if result != "Abort":
+            return result
+        else:
+            api.abort(
+                500,
+                {
+                    "status": "Error",
+                    "message": "Terjadi kesalahan pada server",
+                },
+            )
+
+
+@api.route("/data/kandidat")
+class DataKandidat(Resource):
+    @jwt_required()
+    @api.doc(responses={200: "OK", 500: "Internal Server Error"})
+    @api.marshal_list_with(all_kandidat_data)
+    def get(self):
+        result = adminservice.GetAllKandidatData()
+        if result != "Abort":
+            return result
+        else:
+            api.abort(
+                500,
+                {
+                    "status": "Error",
+                    "message": "Terjadi kesalahan pada server",
+                },
+            )

@@ -13,7 +13,7 @@ from project.tasks.tasks import (
     RegisterKandidatTask,
     RegisterPemilihTask,
     GetTimeDataTask,
-    SetupTimestampTask
+    SetupTimestampTask,
 )
 
 es = EthereumService()
@@ -99,32 +99,32 @@ class AdminService:
                 ],
             )
             message = encode_defunct(primitive=msg)
-            sign_message = w3.eth.account.sign_message(message, admin_access)
+            sign_message = w3.eth.account.sign_message(
+                message, admin_access
+            )
             result = SetupTimestampTask.delay(
-                int(json_data['registerstart']),
-                int(json_data['registerfinis']),
-                int(json_data['votingstart']),
-                int(json_data['votingfinis']),
+                int(json_data["registerstart"]),
+                int(json_data["registerfinis"]),
+                int(json_data["votingstart"]),
+                int(json_data["votingfinis"]),
                 nonce,
-                sign_message.signature.hex()
+                sign_message.signature.hex(),
             )
             if result == "Gagal":
                 raise SolidityError
         except SolidityError:
             message_object = {
-                "status":"Error",
-                "message":"Terjadi kesalahan pada server"
+                "status": "Error",
+                "message": "Terjadi kesalahan pada server",
             }
             return message_object
         else:
             self.SaveAdminTx(
-                admin_data,
-                result.get(),
-                sign_message.signature.hex()
+                admin_data, result.get(), sign_message.signature.hex()
             )
             message_object = {
-                "status":"Berhasil",
-                "message":"Data waktu berhasil di simpan"
+                "status": "Berhasil",
+                "message": "Data waktu berhasil di simpan",
             }
             return message_object
 
@@ -254,7 +254,11 @@ class AdminService:
                             "ethereum_access": pemilih_access.decode(),
                         },
                     )
-                    save_pemilih.GeneratePasswordHash(self.GeneratePemilihUsername(json_data['nama_lengkap']))
+                    save_pemilih.GeneratePasswordHash(
+                        self.GeneratePemilihUsername(
+                            json_data["nama_lengkap"]
+                        )
+                    )
                     save_pemilih.save()
                     self.SaveAdminTx(
                         admin_data,
@@ -262,8 +266,8 @@ class AdminService:
                         sign_message.signature.hex(),
                     )
                     message_object = {
-                        "status":"Berhasil",
-                        "message":"Pemilih berhasil di daftarkan"
+                        "status": "Berhasil",
+                        "message": "Pemilih berhasil di daftarkan",
                     }
                     return message_object
             else:
@@ -274,3 +278,36 @@ class AdminService:
                 return message_object
         else:
             return check_register_time_data
+
+    def GetAllPemilihData(self):
+        try:
+            list_pemilih_data = []
+            pemilih_data = PemilihDoc.objects().all()
+            for user in pemilih_data:
+                list_pemilih_data.append(
+                    {
+                        "id": user.id,
+                        "nama_lengkap": user.nama_lengkap,
+                        "tanggal_lahir": user.tgl_lahir,
+                    }
+                )
+            return list_pemilih_data
+        except Exception:
+            return "Abort"
+
+    def GetAllKandidatData(self):
+        try:
+            list_data_kandidat = []
+            kandidat_data = KandidatDoc.objects().all()
+            for kandidat in kandidat_data:
+                list_data_kandidat.append(
+                    {
+                        "id": kandidat.id,
+                        "nomor_urut": kandidat.nomor_urut,
+                        "nama": kandidat.nama,
+                        "tanggal_lahir": kandidat.tgl_lahir,
+                    }
+                )
+            return list_data_kandidat
+        except Exception:
+            return "Abort"
