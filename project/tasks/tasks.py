@@ -32,6 +32,40 @@ def GetPemilihDataTask(addressPemilih):
 
 
 @celery.task
+def SetupTimestampTask(
+    registerstart,
+    registerfinis,
+    votingstart,
+    votingfinis,
+    nonce,
+    signature,
+):
+    w3 = es.SetupW3()
+    contract = es.AccessContract()
+    main_account_access = os.getenv("MAIN_ACCOUNT")
+    main_account_address = w3.eth.account.privateKeyToAccount(
+        main_account_access
+    ).address
+    main_account_nonce = w3.eth.getTransactionCount(
+        main_account_address
+    )
+    tx_hash = contract.functions.SetupTimedata(
+        registerstart,
+        registerfinis,
+        votingstart,
+        votingfinis,
+        nonce,
+        signature,
+    ).buildTransaction({"nonce": main_account_nonce})
+    sign_tx = w3.eth.account.sign_transaction(tx_hash, main_account_access)
+    try:
+        w3.eth.sendRawTransaction(sign_tx.rawTransaction)
+        return w3.toHex(w3.keccak(sign_tx.rawTransaction))
+    except Exception:
+        return "Gagal"
+
+
+@celery.task
 def RegisterKandidatTask(
     kandidatID, kandidatNameBytes, nonce, signature
 ):
@@ -98,12 +132,15 @@ def VotingTask(kandidatID, nonce, signature):
     tx_hash = contract.functions.Voting(
         kandidatID, nonce, livetime, signature
     ).buildTransaction({"nonce": main_account_nonce})
-    sign_tx = w3.eth.account.sign_transaction(tx_hash, main_account_access)
+    sign_tx = w3.eth.account.sign_transaction(
+        tx_hash, main_account_access
+    )
     try:
         w3.eth.sendRawTransaction(sign_tx.rawTransaction)
         return w3.toHex(w3.keccak(sign_tx.rawTransaction))
     except Exception:
         return "Gagal"
+
 
 @celery.task
 def KandidatTerpilihTask():
