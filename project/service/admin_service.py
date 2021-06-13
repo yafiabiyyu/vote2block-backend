@@ -295,6 +295,38 @@ class AdminService:
         except Exception:
             return "Abort"
 
+    def GetSinglePemilihData(self, pemilihId):
+        data = PemilihDoc.objects(_id=str(pemilihId)).first()
+        if data is not None:
+            pemilih_data = {
+                "pemilih_id": data._id,
+                "nama_lengkap": data.nama_lengkap,
+                "tanggal_lahir": data.tgl_lahir,
+                "contact": data.contact,
+                "alamat": data.alamat,
+            }
+            return pemilih_data
+        else:
+            return "Abort"
+
+    def GetSingleKandidatData(self, kandidatId):
+        data = KandidatDoc.objects(_id=str(kandidatId)).first()
+        if data is not None:
+            kandidat_data = {
+                "kandidat_id": data._id,
+                "nomor_urut": data.nomor_urut,
+                "nama_kandidat": data.nama,
+                "tanggal_lahir": data.nama,
+                "visi": data.visi,
+                "misi": data.misi,
+                "contact": data.contact,
+                "alamat": data.alamat,
+                "image_url": data.image_url,
+            }
+            return kandidat_data
+        else:
+            return "Abort"
+
     def GetAllKandidatData(self):
         try:
             list_data_kandidat = []
@@ -302,7 +334,7 @@ class AdminService:
             for kandidat in kandidat_data:
                 list_data_kandidat.append(
                     {
-                        "id": kandidat.id,
+                        "id": kandidat._id,
                         "nomor_urut": kandidat.nomor_urut,
                         "nama": kandidat.nama,
                         "tanggal_lahir": kandidat.tgl_lahir,

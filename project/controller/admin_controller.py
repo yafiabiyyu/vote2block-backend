@@ -46,6 +46,32 @@ kandidat_data_model = api.model(
     },
 )
 
+single_pemilih_data = api.model(
+    "Single pemilih data",
+    {
+        "pemilih_id": fields.String(readonly=True),
+        "nama_lengkap": fields.String(readonly=True),
+        "tanggal_lahir": fields.String(readonly=True),
+        "contact": fields.Nested(contact, readonly=True),
+        "alamat": fields.Nested(alamat, readonly=True),
+    },
+)
+
+single_kandidat_data = api.model(
+    "Single kandidat data",
+    {
+        "kandidat_id": fields.String(readonly=True),
+        "nomor_urut": fields.Integer(readonly=True),
+        "nama_kandidat": fields.String(readonly=True),
+        "tanggal_lahir": fields.String(readonly=True),
+        "visi": fields.String(readonly=True),
+        "misi": fields.String(readonly=True),
+        "contact": fields.Nested(contact, readonly=True),
+        "alamat": fields.Nested(alamat, readonly=True),
+        "image_url": fields.String(readonly=True),
+    },
+)
+
 all_pemilih_data = api.model(
     "Model untuk seluruh data pemilih",
     {
@@ -154,6 +180,44 @@ class DataPemilih(Resource):
                 {
                     "status": "Error",
                     "message": "Terjadi kesalahan pada server",
+                },
+            )
+
+
+@api.route("/data/pemilih/<pemilihId>")
+class SinglePemilihData(Resource):
+    @jwt_required()
+    @api.doc(responses={200: "OK", 404: "Not Found"})
+    @api.marshal_with(single_pemilih_data)
+    def get(self, pemilihId):
+        result = adminservice.GetSinglePemilihData(pemilihId)
+        if result != "Abort":
+            return result
+        else:
+            api.abort(
+                404,
+                {
+                    "status": "Gagal",
+                    "message": "Pemilih tidak ditemukan",
+                },
+            )
+
+
+@api.route("/data/kandidat/<kandidatId>")
+class SingleKandidatData(Resource):
+    @jwt_required()
+    @api.doc(responses={200: "OK", 404: "Not Fount"})
+    @api.marshal_with(single_kandidat_data)
+    def get(self, kandidatId):
+        result = adminservice.GetSingleKandidatData(kandidatId)
+        if result != "Abort":
+            return result
+        else:
+            api.abort(
+                404,
+                {
+                    "status": "Gagal",
+                    "message": "Kandidat tidak ditemukan",
                 },
             )
 
