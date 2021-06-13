@@ -29,6 +29,7 @@ def GetPemilihDataTask(addressPemilih):
     result = contract.functions.GetPemilihData(
         w3.toChecksumAddress(addressPemilih)
     ).call()
+    return result
 
 
 @celery.task
@@ -57,7 +58,9 @@ def SetupTimestampTask(
         nonce,
         signature,
     ).buildTransaction({"nonce": main_account_nonce})
-    sign_tx = w3.eth.account.sign_transaction(tx_hash, main_account_access)
+    sign_tx = w3.eth.account.sign_transaction(
+        tx_hash, main_account_access
+    )
     try:
         w3.eth.sendRawTransaction(sign_tx.rawTransaction)
         return w3.toHex(w3.keccak(sign_tx.rawTransaction))
