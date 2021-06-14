@@ -32,6 +32,22 @@ pemilih_info_model = api.model(
     },
 )
 
+update_password_model = api.model(
+    "Model untuk update password pemilih",
+    {
+        "old_password": fields.String(required=True),
+        "new_password": fields.String(required=True),
+    },
+)
+
+message_object_model = api.model(
+    "Model untuk message object",
+    {
+        "status": fields.String(readonly=True),
+        "message": fields.String(readonly=True),
+    },
+)
+
 
 @api.route("/detail")
 class DetailPemilih(Resource):
@@ -51,3 +67,18 @@ class DetailPemilih(Resource):
                     "message": "Terjadi masalah pada server",
                 },
             )
+
+
+@api.route("/update/password")
+class UpdatePasswordPemilih(Resource):
+    @jwt_required()
+    @api.doc(responses={200: "OK", 400: "Bad Request"})
+    @api.expect(update_password_model)
+    def post(self):
+        user_data = get_jwt()["sub"]
+        json_data = request.json
+        result = ps.PemilihUpdatePassword(json_data, user_data)
+        if result["status"] == "Berhasil":
+            return result
+        else:
+            api.abort(400, result)

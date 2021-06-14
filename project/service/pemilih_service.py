@@ -1,3 +1,4 @@
+from flask_mongoengine import json
 from project.models.user_model import PemilihDoc
 from project.tasks.tasks import GetPemilihDataTask
 
@@ -28,3 +29,28 @@ class PemilihService:
             return data
         except Exception:
             return "Error"
+
+    def PemilihUpdatePassword(self, json_data, user_data):
+        get_user_data = PemilihDoc.objects(username=user_data).first()
+        if get_user_data is not None and get_user_data.VerifyPassword(
+            json_data["old_password"]
+        ):
+            generate_new_password_hash = (
+                get_user_data.UpdatePasswordHash(
+                    json_data["new_password"]
+                )
+            )
+            new_user_password_update = PemilihDoc.objects(
+                username=user_data
+            ).update(password_hash=generate_new_password_hash)
+            message_object = {
+                "status":"Berhasil",
+                "message":"Password berhasil di perbarui"
+            }
+            return message_object
+        else:
+            message_object = {
+                "status":"Gagal",
+                "message":"Terjadi kesalahan"
+            }
+            return message_object
