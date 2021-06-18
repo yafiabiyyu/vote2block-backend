@@ -1,9 +1,35 @@
 from flask_mongoengine import json
-from project.models.user_model import PemilihDoc
+from project.models.user_model import PemilihDoc, PemilihTxDoc
+from project.service.enkripsi_service import DataEnkripsi
 from project.tasks.tasks import GetPemilihDataTask
+
+ed = DataEnkripsi()
 
 
 class PemilihService:
+    def GetPemilihEthereumData(self, user_data):
+        data = PemilihDoc.objects(username=user_data).first()
+        pemilih_access = ed.Dekripsi(
+            data.ethereum["ethereum_access"].encode()
+        )
+        return data.ethereum["ethereum_address"], pemilih_access
+
+    def GetPemilihTxHistory(self, user_data):
+        pemilih_data = PemilihDoc.objects(username=user_data).first()
+        get_pemilihTx_history = list(
+            PemilihTxDoc(user_data=pemilih_data).all()
+        )
+        return get_pemilihTx_history
+
+    def SavePemilihTxHistory(self, pemilih_username, tx_hash, signature):
+        pemilih_data = PemilihDoc.objects(username=pemilih_username).first()
+        save_pemilih_tx = PemilihTxDoc(
+            user_data = pemilih_data,
+            tx_hash = tx_hash,
+            signature_data=signature
+        )
+        save_pemilih_tx.save()
+
     def GetPemilihData(self, user_data):
         try:
             data_from_db = PemilihDoc.objects(
@@ -44,13 +70,13 @@ class PemilihService:
                 username=user_data
             ).update(password_hash=generate_new_password_hash)
             message_object = {
-                "status":"Berhasil",
-                "message":"Password berhasil di perbarui"
+                "status": "Berhasil",
+                "message": "Password berhasil di perbarui",
             }
             return message_object
         else:
             message_object = {
-                "status":"Gagal",
-                "message":"Terjadi kesalahan"
+                "status": "Gagal",
+                "message": "Terjadi kesalahan",
             }
             return message_object
