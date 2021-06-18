@@ -20,10 +20,10 @@ class AdminTest(BaseCase):
         # test endpoint setup waktu
         endpoint = self.base_url + "/admin/setting/waktu"
         payload = {
-            "registerstart": "1623995040",
-            "registerfinis": "1623995340",
-            "votingstart": "1623995400",
-            "votingfinis": "1623999000",
+            "registerstart": "1624004100",
+            "registerfinis": "1624004520",
+            "votingstart": "1624004580",
+            "votingfinis": "1624008600",
         }
         response = self.app.post(
             endpoint,
@@ -79,7 +79,7 @@ class AdminTest(BaseCase):
         endpoint = self.base_url + "/admin/pendaftaran/pemilih"
         payload = {
             "pemilih_id": "1741720099",
-            "nama_lengkap": "Pemilih Stau",
+            "nama_lengkap": "Pemilih Satu",
             "tgl_lahir": "16/11/1998",
             "contact": {
                 "email": "pemilihsatu@vote2block.eth",
