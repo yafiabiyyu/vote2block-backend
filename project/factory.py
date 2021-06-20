@@ -5,11 +5,13 @@ from dotenv import load_dotenv
 import os
 from datetime import timedelta
 from .celery_utils import init_celery
+from flask_cors import CORS
 
 # deklarasi variabel
 load_dotenv()
 db = MongoEngine()
 jwt = JWTManager()
+cors = CORS()
 
 PKG_NAME = os.path.dirname(os.path.realpath(__file__)).split("/")[-1]
 
@@ -34,6 +36,7 @@ def create_app(app_name=PKG_NAME, **kwargs):
     # init app
     db.init_app(app)
     jwt.init_app(app)
+    cors.init_app(app)
 
     # import controller blueprint
     from .controller import controller as controller_blueprint

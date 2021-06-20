@@ -26,8 +26,8 @@ pemilih_data_model = api.model(
         "pemilih_id": fields.String(required=True),
         "nama_lengkap": fields.String(required=True),
         "tgl_lahir": fields.String(required=True),
-        "contact": fields.Nested(contact),
-        "alamat": fields.Nested(alamat),
+        "contact": fields.List(fields.Nested(contact)),
+        "alamat": fields.List(fields.Nested(alamat)),
     },
 )
 
@@ -40,8 +40,8 @@ kandidat_data_model = api.model(
         "tanggal_lahir": fields.String(required=True),
         "visi": fields.String(required=True),
         "misi": fields.String(required=True),
-        "contact": fields.Nested(contact, required=True),
-        "alamat": fields.Nested(alamat),
+        "contact": fields.List(fields.Nested(contact, required=True)),
+        "alamat": fields.List(fields.Nested(alamat)),
         "image_url": fields.String(required=True),
     },
 )
@@ -52,8 +52,8 @@ single_pemilih_data = api.model(
         "pemilih_id": fields.String(readonly=True),
         "nama_lengkap": fields.String(readonly=True),
         "tanggal_lahir": fields.String(readonly=True),
-        "contact": fields.Nested(contact, readonly=True),
-        "alamat": fields.Nested(alamat, readonly=True),
+        "contact": fields.List(fields.Nested(contact, readonly=True)),
+        "alamat": fields.List(fields.Nested(alamat, readonly=True)),
     },
 )
 
@@ -66,8 +66,8 @@ single_kandidat_data = api.model(
         "tanggal_lahir": fields.String(readonly=True),
         "visi": fields.String(readonly=True),
         "misi": fields.String(readonly=True),
-        "contact": fields.Nested(contact, readonly=True),
-        "alamat": fields.Nested(alamat, readonly=True),
+        "contact": fields.List(fields.Nested(contact, readonly=True)),
+        "alamat": fields.List(fields.Nested(alamat, readonly=True)),
         "image_url": fields.String(readonly=True),
     },
 )
