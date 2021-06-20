@@ -23,6 +23,13 @@ def GetKandidatTotalDataTask():
 
 
 @celery.task
+def GetKandidatData(kandidatId):
+    contract = es.AccessContract()
+    result = contract.functions.GetKandidatData(kandidatId).call()
+    return result
+
+
+@celery.task
 def GetPemilihDataTask(addressPemilih):
     w3 = es.SetupW3()
     contract = es.AccessContract()
@@ -57,7 +64,13 @@ def SetupTimestampTask(
         votingfinis,
         nonce,
         signature,
-    ).buildTransaction({"nonce": main_account_nonce})
+    ).buildTransaction(
+        {
+            "gas": 150000,
+            "gasPrice": w3.toWei("25", "gwei"),
+            "nonce": main_account_nonce,
+        }
+    )
     sign_tx = w3.eth.account.sign_transaction(
         tx_hash, main_account_access
     )
@@ -84,7 +97,13 @@ def RegisterKandidatTask(
     livetime = int(time.time())
     tx_hash = contract.functions.KandidatRegister(
         kandidatID, nonce, livetime, kandidatNameBytes, signature
-    ).buildTransaction({"nonce": main_account_nonce})
+    ).buildTransaction(
+        {
+            "gas": 150000,
+            "gasPrice": w3.toWei("25", "gwei"),
+            "nonce": main_account_nonce,
+        }
+    )
     sign_tx = w3.eth.account.sign_transaction(
         tx_hash, main_account_access
     )
@@ -109,7 +128,13 @@ def RegisterPemilihTask(pemilihAddress, nonce, signature):
     livetime = int(time.time())
     tx_hash = contract.functions.PemilihRegister(
         pemilihAddress, nonce, livetime, signature
-    ).buildTransaction({"nonce": main_account_nonce})
+    ).buildTransaction(
+        {
+            "gas": 150000,
+            "gasPrice": w3.toWei("25", "gwei"),
+            "nonce": main_account_nonce,
+        }
+    )
     sign_tx = w3.eth.account.sign_transaction(
         tx_hash, main_account_access
     )
@@ -134,7 +159,13 @@ def VotingTask(kandidatID, nonce, signature):
     livetime = int(time.time())
     tx_hash = contract.functions.Voting(
         kandidatID, nonce, livetime, signature
-    ).buildTransaction({"nonce": main_account_nonce})
+    ).buildTransaction(
+        {
+            "gas": 150000,
+            "gasPrice": w3.toWei("25", "gwei"),
+            "nonce": main_account_nonce,
+        }
+    )
     sign_tx = w3.eth.account.sign_transaction(
         tx_hash, main_account_access
     )

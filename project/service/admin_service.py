@@ -61,7 +61,7 @@ class AdminService:
     def CheckRegisterTimeStatus(self):
         livetime = int(time.time())
         data = GetTimeDataTask.delay()
-        time_status = data.get()
+        time_status = data.wait()
         if livetime < time_status[0]:
             message_object = {
                 "status": "Gagal",
