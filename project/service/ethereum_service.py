@@ -1,20 +1,20 @@
+from eth_account import account
 from web3 import Web3, HTTPProvider
 from dotenv import load_dotenv
-from project.models.user_model import UserDoc
-from project.service.enkripsi_service import DataEncryption
-from eth_account.messages import encode_defunct
-import os
-import json
+from project.service.enkripsi_service import DataEnkripsi
+import json, os
 
 load_dotenv()
-de = DataEncryption()
+de = DataEnkripsi()
 
 
 class EthereumService:
     def SetupW3(self):
         rpc_url = os.getenv("RPC_URL")
-        default_account = os.getenv("DEFAULT_ACCOUNT")
         w3 = Web3(HTTPProvider(rpc_url))
+        w3.eth.defaultAccount = w3.eth.account.privateKeyToAccount(
+            os.getenv("MAIN_ACCOUNT")
+        ).address
         return w3
 
     def AccessContract(self):
@@ -27,8 +27,8 @@ class EthereumService:
         return contract
 
     def CreateWallet(self):
-        key = os.getenv("SECRET_KEY")
         w3 = self.SetupW3()
+        key = os.getenv("SECRET_KEY")
         account = w3.eth.account.create(key)
-        ethereum_access = de.Encrypting(account.privateKey)
+        ethereum_access = de.Enkripsi(account.privateKey)
         return account.address, ethereum_access

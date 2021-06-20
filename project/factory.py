@@ -3,6 +3,7 @@ from flask_mongoengine import MongoEngine
 from flask_jwt_extended import JWTManager
 from dotenv import load_dotenv
 import os
+from datetime import timedelta
 from .celery_utils import init_celery
 
 # deklarasi variabel
@@ -21,6 +22,7 @@ def create_app(app_name=PKG_NAME, **kwargs):
         JWT_SECRET_KEY=os.getenv("JWT_KEY"),
         JWT_BLACKLIST_ENABLED=True,
         JWT_BLACKLIST_TOKEN_CHECKS=["access", "refresh"],
+        JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=1)
     )
     app.config.setdefault("JWT_TOKEN_LOCATION", ("headers",))
     app.config.setdefault("JWT_HEADER_NAME", "Authorization")
