@@ -20,14 +20,20 @@ alamat["alamat_lengkap"] = fields.String(
     attribute="alamat_lengkap", required=True
 )
 
+# Dashboard data
+data = {}
+data['total_pemilih'] = fields.Integer(attribute="total_pemilih")
+data['total_kandidat'] = fields.Integer(attriute="total_kandidat")
+data['ethereum_balance'] = fields.Integer(attribute="ethereum_balance")
+
 pemilih_data_model = api.model(
     "Model untuk data pemilih",
     {
         "pemilih_id": fields.String(required=True),
         "nama_lengkap": fields.String(required=True),
         "tgl_lahir": fields.String(required=True),
-        "contact": fields.List(fields.Nested(contact)),
-        "alamat": fields.List(fields.Nested(alamat)),
+        "contact": fields.Nested(contact),
+        "alamat": fields.Nested(alamat),
     },
 )
 
@@ -40,8 +46,8 @@ kandidat_data_model = api.model(
         "tanggal_lahir": fields.String(required=True),
         "visi": fields.String(required=True),
         "misi": fields.String(required=True),
-        "contact": fields.List(fields.Nested(contact, required=True)),
-        "alamat": fields.List(fields.Nested(alamat)),
+        "contact": fields.Nested(contact, required=True),
+        "alamat": fields.Nested(alamat),
         "image_url": fields.String(required=True),
     },
 )
@@ -52,8 +58,8 @@ single_pemilih_data = api.model(
         "pemilih_id": fields.String(readonly=True),
         "nama_lengkap": fields.String(readonly=True),
         "tanggal_lahir": fields.String(readonly=True),
-        "contact": fields.List(fields.Nested(contact, readonly=True)),
-        "alamat": fields.List(fields.Nested(alamat, readonly=True)),
+        "contact": fields.Nested(contact, readonly=True),
+        "alamat": fields.Nested(alamat, readonly=True),
     },
 )
 
@@ -66,8 +72,8 @@ single_kandidat_data = api.model(
         "tanggal_lahir": fields.String(readonly=True),
         "visi": fields.String(readonly=True),
         "misi": fields.String(readonly=True),
-        "contact": fields.List(fields.Nested(contact, readonly=True)),
-        "alamat": fields.List(fields.Nested(alamat, readonly=True)),
+        "contact": fields.Nested(contact, readonly=True),
+        "alamat": fields.Nested(alamat, readonly=True),
         "image_url": fields.String(readonly=True),
     },
 )
@@ -105,6 +111,14 @@ time_data_model = api.model(
 message_object_model = api.model(
     "Model untuk message object",
     {"status": fields.String, "message": fields.String},
+)
+
+dashbaord_model = api.model(
+    "Model untuk halaman dashboard",
+    {
+        "status":fields.String(),
+        "data":fields.Nested(data)
+    }
 )
 
 
@@ -239,3 +253,12 @@ class DataKandidat(Resource):
                     "message": "Terjadi kesalahan pada server",
                 },
             )
+
+@api.route("/dashboard")
+class AdminDashboard(Resource):
+    @jwt_required()
+    @api.doc(responses={200:"OK", 500:"Internal server error"})
+    @api.marshal_with(dashbaord_model)
+    def get(self):
+        result = adminservice.GetAdminDashboard()
+        return result

@@ -343,3 +343,18 @@ class AdminService:
             return list_data_kandidat
         except Exception:
             return "Abort"
+    
+    def GetAdminDashboard(self):
+        total_pemilih = PemilihDoc.objects().all().count()
+        total_kandidat = KandidatDoc.objects().all().count()
+        w3 = es.SetupW3()
+        system_balance = w3.fromWei(w3.eth.get_balance(w3.eth.defaultAccount), 'ether')
+        message_object={
+            "status":"Berhasil",
+            "data":{
+            "total_pemilih":total_pemilih,
+            "total_kandidat":total_kandidat,
+            "ethereum_balance":system_balance
+            }
+        }
+        return message_object
