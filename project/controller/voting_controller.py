@@ -95,3 +95,21 @@ class HasilPemilihan(Resource):
             api.abort(500, hasil)
         else:
             return hasil
+
+@api.route('/check/waktu/pendaftaran')
+class CheckWaktuPendaftaran(Resource):
+    @jwt_required()
+    @api.marshal_with(message_object_model)
+    @api.doc(responses={200:"OK", 500:"Internal server Error"})
+    def get(self):
+        result = voting.CheckRegister()
+        return result
+
+@api.route('/check/waktu')
+class CheckWaktu(Resource):
+    @jwt_required()
+    @api.marshal_with(message_object_model)
+    @api.doc(responses={200:"OK", 500:"Internal server Error"})
+    def get(self):
+        result = voting.getWaktuData()
+        return result

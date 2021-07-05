@@ -19,25 +19,41 @@ ps = PemilihService()
 
 
 class VotingService:
+    def getWaktuData(self):
+        get_time_data = GetTimeDataTask.delay()
+        time_data = get_time_data.get()
+        if time_data[0] != 0:
+            message_object = {
+                "status": "Gagal",
+                "message": "Waktu telah di tetapkan",
+            }
+            return message_object
+        else:
+            message_object = {
+                "status": "Berhasil",
+                "message": "Waktu belum di tetapkan",
+            }
+            return message_object
+
     def CheckRegister(self):
         livetime = int(time.time())
         get_time_data = GetTimeDataTask.delay()
         time_data = get_time_data.get()
         if livetime < time_data[0]:
             message_object = {
-                "status":"Gagal",
-                "message":"Waktu pendaftaran belum dimulai"
+                "status": "Gagal",
+                "message": "Waktu pendaftaran belum dimulai",
             }
             return message_object
         elif livetime > time_data[0] and livetime < time_data[1]:
             message_object = {
-                "status":"Berhasil",
-                "message":"Waktu pendaftaran telah dibuka"
+                "status": "Berhasil",
+                "message": "Waktu pendaftaran telah dibuka",
             }
         elif livetime > time_data[1]:
             message_object = {
-                "status":"Gagal",
-                "message":"Waktu pendaftaran telah berakhir"
+                "status": "Gagal",
+                "message": "Waktu pendaftaran telah berakhir",
             }
 
     def CheckVoting(self, user_data):
