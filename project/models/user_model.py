@@ -29,6 +29,8 @@ class AdminDoc(db.Document):
 class AdminTxHistory(db.Document):
     user_data = db.ReferenceField("AdminDoc")
     tx_hash = db.StringField(required=True)
+    type_tx = db.StringField(required=True)
+    tanggal_tx = db.StringField(required=True)
     signature_data = db.StringField(required=True)
 
 
@@ -57,6 +59,8 @@ class PemilihDoc(db.Document):
 class PemilihTxDoc(db.Document):
     user_data = db.ReferenceField("PemilihDoc")
     tx_hash = db.StringField(required=True)
+    type_tx = db.StringField(required=True)
+    tanggal_tx = db.StringField(required=True)
     signature_data = db.StringField(required=True)
 
 
