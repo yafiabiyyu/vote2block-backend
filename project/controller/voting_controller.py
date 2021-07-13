@@ -96,7 +96,7 @@ class HasilPemilihan(Resource):
         else:
             return hasil
 
-@api.route('/check/waktu/pendaftaran')
+@api.route('/status/waktu/pendaftaran')
 class CheckWaktuPendaftaran(Resource):
     @jwt_required()
     @api.marshal_with(message_object_model)
@@ -105,7 +105,7 @@ class CheckWaktuPendaftaran(Resource):
         result = voting.CheckRegister()
         return result
 
-@api.route('/check/waktu')
+@api.route('/status/waktu')
 class CheckWaktu(Resource):
     @jwt_required()
     @api.marshal_with(message_object_model)

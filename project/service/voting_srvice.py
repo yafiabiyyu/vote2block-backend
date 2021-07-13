@@ -55,6 +55,7 @@ class VotingService:
                 "status": "Gagal",
                 "message": "Waktu pendaftaran telah berakhir",
             }
+            return message_object
 
     def CheckVoting(self, user_data):
         livetime = int(time.time())

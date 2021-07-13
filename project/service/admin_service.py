@@ -285,7 +285,7 @@ class AdminService:
                 "kandidat_id": data._id,
                 "nomor_urut": data.nomor_urut,
                 "nama_kandidat": data.nama,
-                "tanggal_lahir": data.nama,
+                "tanggal_lahir": data.tgl_lahir,
                 "visi": data.visi,
                 "misi": data.misi,
                 "contact": data.contact,

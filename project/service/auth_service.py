@@ -55,7 +55,7 @@ class AuthService:
                 )
                 message_object = {
                     "status": "Berhasil",
-                    "message": "Admin berhasil login",
+                    "message": "Pemilih berhasil login",
                     "data": {
                         "access_token": access_token,
                         "refresh_token": refresh_token,
@@ -71,7 +71,7 @@ class AuthService:
         else:
             message_object = {
                 "status": "Gagal",
-                "message": "Data admin tidak ditemukan",
+                "message": "Data pemilih tidak ditemukan",
             }
             return message_object
 
