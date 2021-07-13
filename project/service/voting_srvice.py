@@ -19,26 +19,26 @@ ps = PemilihService()
 
 
 class VotingService:
-    def getWaktuData(self):
-        get_time_data = GetTimeDataTask.delay()
-        time_data = get_time_data.get()
+    def GetWaktuStatus(self):
+        data_from_contract = GetTimeDataTask.delay()
+        time_data = data_from_contract.get()
         if time_data[0] != 0:
             message_object = {
                 "status": "Gagal",
-                "message": "Waktu telah di tetapkan",
+                "message": "Waktu telah di tentukan",
             }
             return message_object
         else:
             message_object = {
                 "status": "Berhasil",
-                "message": "Waktu belum di tetapkan",
+                "message": "Waktu belum di tentukan",
             }
             return message_object
 
-    def CheckRegister(self):
+    def CheckRegiserWaktu(self):
         livetime = int(time.time())
-        get_time_data = GetTimeDataTask.delay()
-        time_data = get_time_data.get()
+        data_from_contract = GetTimeDataTask.delay()
+        time_data = data_from_contract.get()
         if livetime < time_data[0]:
             message_object = {
                 "status": "Gagal",
@@ -57,49 +57,51 @@ class VotingService:
             }
             return message_object
 
-    def CheckVoting(self, user_data):
+    def CheckVotingWaktu(self):
         livetime = int(time.time())
+        data_from_contract = GetTimeDataTask.delay()
+        time_data = data_from_contract.get()
+        if livetime < time_data[2]:
+            message_object = {
+                "status": "Gagal",
+                "message": "Pemilihan belu di mulai",
+            }
+            return message_object
+        elif livetime > time_data[2] and livetime < time_data[3]:
+            message_object = {
+                "status": "Berhasil",
+                "message": "Pemilihan telah di mulai",
+            }
+            return message_object
+        elif livetime > time_data[2]:
+            message_object = {
+                "status": "Gagal",
+                "message": "Pemilihan telah berakhir",
+            }
+            return message_object
+
+    def CheckHakPilih(self, user_data):
         pemilih_data = PemilihDoc.objects(username=user_data).first()
         pemilih_address = pemilih_data.ethereum["ethereum_address"]
-        get_pemilih_status = GetPemilihDataTask.delay(pemilih_address)
-        pemilih_status = get_pemilih_status.get()
-        get_time_data = GetTimeDataTask.delay()
-        time_data = get_time_data.get()
-        if (
-            livetime > time_data[0]
-            and livetime > time_data[2]
-            and livetime < time_data[3]
-        ):
-            if pemilih_status[0] == 0:
-                message_object = {
-                    "status": "Gagal",
-                    "message": "Anda tidak memiliki hak memilih",
-                }
-                return message_object
-            else:
-                if pemilih_status[2] == False:
-                    message_object = {
-                        "status": "Berhasil",
-                        "message": "Anda berhak menggunakan hak pilih anda",
-                    }
-                    return message_object
-                else:
-                    message_object = {
-                        "status": "Gagal",
-                        "message": "Anda sudah memberikan hak pilih anda",
-                    }
-                    return message_object
+        data_from_contract = GetPemilihDataTask.delay(pemilih_address)
+        status_hakPilih = data_from_contract.get()
+        if status_hakPilih[0] == 0:
+            message_object = {
+                "status": "Gagal",
+                "message": "Anda tidak memiliki hak pilih",
+            }
+            return message_object
         else:
-            if livetime < time_data[1] or livetime < time_data[2]:
+            if status_hakPilih[2] == False:
                 message_object = {
-                    "status": "Gagal",
-                    "message": "Waktu pemilihan belum di buka",
+                    "status": "Berhasil",
+                    "message": "Anda belum menggunakan hak pilih",
                 }
                 return message_object
             else:
                 message_object = {
                     "status": "Gagal",
-                    "message": "Waktu pemilihan telah berakhir",
+                    "message": "Anda telah menggunakan hak pilih",
                 }
                 return message_object
 
@@ -140,6 +142,23 @@ class VotingService:
                 "message": "Anda berhasil memberikan suara anda",
             }
             return message_object
+    
+    def GetAllKandidatData(self):
+        try:
+            list_data_kandidat = []
+            kandidat_data = KandidatDoc.objects().all()
+            for kandidat in kandidat_data:
+                list_data_kandidat.append(
+                    {
+                        "nomor_urut": kandidat.nomor_urut,
+                        "nama": kandidat.nama,
+                        "visi": kandidat.visi,
+                        "misi": kandidat.misi,
+                    }
+                )
+            return list_data_kandidat
+        except Exception:
+            return "Abort"
 
     def QuickCount(self):
         try:
@@ -154,10 +173,7 @@ class VotingService:
                 ).first()
                 list_kandidat.append(
                     {
-                        "nomor_urut": kandidat_from_db.nomor_urut,
                         "nama_kandidat": kandidat_from_db.nama,
-                        "visi": kandidat_from_db.visi,
-                        "misi": kandidat_from_db.misi,
                         "total_suara": int(kandidat_data[1]),
                     }
                 )
