@@ -2,6 +2,7 @@ from flask_mongoengine import json
 from project.models.user_model import PemilihDoc, PemilihTxDoc
 from project.service.enkripsi_service import DataEnkripsi
 from project.tasks.tasks import GetPemilihDataTask
+from datetime import datetime as dt
 
 ed = DataEnkripsi()
 
@@ -26,6 +27,8 @@ class PemilihService:
         save_pemilih_tx = PemilihTxDoc(
             user_data = pemilih_data,
             tx_hash = tx_hash,
+            type_tx = "voting",
+            tanggal_tx = dt.today().strftime("%Y-%m-%d"),
             signature_data=signature
         )
         save_pemilih_tx.save()

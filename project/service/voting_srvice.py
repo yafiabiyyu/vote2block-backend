@@ -39,23 +39,31 @@ class VotingService:
         livetime = int(time.time())
         data_from_contract = GetTimeDataTask.delay()
         time_data = data_from_contract.get()
-        if livetime < time_data[0]:
+        if time_data[0] == 0:
             message_object = {
-                "status": "Gagal",
-                "message": "Waktu pendaftaran belum dimulai",
+                "status":"Gagal",
+                "message":"Waktu pendaftaran belum di tentukan"
             }
             return message_object
-        elif livetime > time_data[0] and livetime < time_data[1]:
-            message_object = {
-                "status": "Berhasil",
-                "message": "Waktu pendaftaran telah dibuka",
-            }
-        elif livetime > time_data[1]:
-            message_object = {
-                "status": "Gagal",
-                "message": "Waktu pendaftaran telah berakhir",
-            }
-            return message_object
+        else:
+            if livetime < time_data[0]:
+                message_object = {
+                    "status":"Gagal",
+                    "message":"Waktu pendaftaran belum di mulai"
+                }
+                return message_object
+            elif livetime > time_data[0] and livetime < time_data[1]:
+                message_object = {
+                    "status": "Berhasil",
+                    "message": "Waktu pendaftaran telah dibuka",
+                }
+                return message_object
+            elif livetime > time_data[1]:
+                message_object = {
+                    "status": "Gagal",
+                    "message": "Waktu pendaftaran telah berakhir",
+                }
+                return message_object
 
     def CheckVotingWaktu(self):
         livetime = int(time.time())
@@ -64,7 +72,7 @@ class VotingService:
         if livetime < time_data[2]:
             message_object = {
                 "status": "Gagal",
-                "message": "Pemilihan belu di mulai",
+                "message": "Pemilihan belum di mulai",
             }
             return message_object
         elif livetime > time_data[2] and livetime < time_data[3]:
@@ -85,25 +93,18 @@ class VotingService:
         pemilih_address = pemilih_data.ethereum["ethereum_address"]
         data_from_contract = GetPemilihDataTask.delay(pemilih_address)
         status_hakPilih = data_from_contract.get()
-        if status_hakPilih[0] == 0:
+        if status_hakPilih[2] == False:
             message_object = {
-                "status": "Gagal",
-                "message": "Anda tidak memiliki hak pilih",
+                "status": "Berhasil",
+                "message": "Anda belum menggunakan hak pilih",
             }
             return message_object
         else:
-            if status_hakPilih[2] == False:
-                message_object = {
-                    "status": "Berhasil",
-                    "message": "Anda belum menggunakan hak pilih",
-                }
-                return message_object
-            else:
-                message_object = {
-                    "status": "Gagal",
-                    "message": "Anda telah menggunakan hak pilih",
-                }
-                return message_object
+            message_object = {
+                "status": "Gagal",
+                "message": "Anda sudah menggunakan hak pilih",
+            }
+            return message_object
 
     def Voting(self, json_data, user_data):
         w3 = es.SetupW3()
@@ -142,7 +143,7 @@ class VotingService:
                 "message": "Anda berhasil memberikan suara anda",
             }
             return message_object
-    
+
     def GetAllKandidatData(self):
         try:
             list_data_kandidat = []
@@ -154,6 +155,7 @@ class VotingService:
                         "nama": kandidat.nama,
                         "visi": kandidat.visi,
                         "misi": kandidat.misi,
+                        "image_url": kandidat.image_url,
                     }
                 )
             return list_data_kandidat
@@ -194,18 +196,55 @@ class VotingService:
             except SolidityError:
                 return "Abort"
             else:
-                kandidat_terpilih = KandidatDoc.objects(
-                    nomor_urut=pemenang_data
-                ).first()
+                kandidat_terpilih = KandidatDoc.objects(nomor_urut=pemenang_data).first()
                 pemenang = {
                     "nomor_urut": kandidat_terpilih.nomor_urut,
-                    "nama_kandidat": kandidat_terpilih.nama,
+                    "nama": kandidat_terpilih.nama,
+                    "visi":kandidat_terpilih.visi,
+                    "misi":kandidat_terpilih.misi,
                     "image_url": kandidat_terpilih.image_url,
                 }
-                return pemenang
+                message_object = {
+                    "status":"Berhasil",
+                    "message":"Data kandidat Pemenang",
+                    "data": pemenang
+                }
+                return message_object
         elif livetime < time_data[3]:
             message_object = {
                 "status": "Gagal",
                 "message": "Waktu pemilihan belum berakhir",
+            }
+            return message_object
+
+    def GetKandidatTerpilih(self, user_data):
+        pemilih_data = PemilihDoc.objects(username=user_data).first()
+        pemilih_address = pemilih_data.ethereum["ethereum_address"]
+        data_from_contract = GetPemilihDataTask.delay(pemilih_address)
+        kandidat_terpilih_data = data_from_contract.get()
+        if kandidat_terpilih_data[1] == 0:
+            tx_hash = PemilihTxDoc.objects(user_data=pemilih_data).first()
+            message_object = {
+                "status": "Gagal",
+                "message": "Bukti pemilihan anda masih dalam proses",
+                "tx_hash": "https://ropsten.etherscan.io/tx/{}".format(str(tx_hash.tx_hash))
+                
+            }
+            return message_object
+        else:
+            kandidat_dipilih = KandidatDoc.objects(
+                nomor_urut=kandidat_terpilih_data[1]
+            ).first()
+            kandidat = {
+                "nomor_urut": kandidat_dipilih.nomor_urut,
+                "nama": kandidat_dipilih.nama,
+                "visi": kandidat_dipilih.visi,
+                "misi": kandidat_dipilih.misi,
+                "image_url": kandidat_dipilih.image_url,
+            }
+            message_object = {
+                "status":"Berhasil",
+                "message":"Bukti Pemilihan",
+                "data":kandidat
             }
             return message_object

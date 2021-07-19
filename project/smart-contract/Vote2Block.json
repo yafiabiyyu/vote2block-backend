@@ -19589,8 +19589,8 @@
         }
       },
       "links": {},
-      "address": "0xcbc6259fB4112f62F8937a7deaE7F6FF4e8f1f49",
-      "transactionHash": "0xa1f08bd86eb5a59bc788dc93a5dc7d804e93e95ca587077c2114dca075ba6576"
+      "address": "0xF6F67E06dce612999Bb09D90c22fE100e231230E",
+      "transactionHash": "0x70b21718c47778499202b027ac68d72ee0e286da8c508005d6ffc19af5851d3d"
     },
     "5777": {
       "events": {
@@ -23927,10 +23927,1320 @@
       "links": {},
       "address": "0x49F202e4296C84915B06dEE80D6d5C518f3BB845",
       "transactionHash": "0x9519295d6d5d23e107746783293c652bfa08811f2b42760f560c3296c7fa0e9d"
+    },
+    "1625487533215": {
+      "events": {
+        "0xc66bcbe13027ad75e39e0c01012b117bd4090ec89074d6e87c1a0a9692685e51": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_kandidatID",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_totalVote",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "bytes32",
+              "name": "_kandidatName",
+              "type": "bytes32"
+            },
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "_ownerAddress",
+              "type": "address"
+            }
+          ],
+          "name": "RegisterKandidat",
+          "type": "event"
+        },
+        "0x7230904336638db5b4f894024258b07b436918de8a60ef98f15e2c1982e4e546": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "_pemilihAddress",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_statusHakPilih",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "bool",
+              "name": "statusVoting",
+              "type": "bool"
+            },
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "_ownerAddress",
+              "type": "address"
+            }
+          ],
+          "name": "RegisterPemilih",
+          "type": "event"
+        },
+        "0x749addf8eadeff63c43be59c27331be5c6d4fc9e82bbfbcf162321c9b35a95b4": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "voterAddress",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "kandidatID",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "bool",
+              "name": "statusVoting",
+              "type": "bool"
+            }
+          ],
+          "name": "Voted",
+          "type": "event"
+        },
+        "0x7a01a2c9557cf6a0bb4a723bf0cd2672baab8cc6d1c39bf00334be8b7459a963": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_registerstart",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_registerfinis",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_votingstart",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_votingfinis",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "_ownerAddress",
+              "type": "address"
+            }
+          ],
+          "name": "VotingTime",
+          "type": "event"
+        }
+      },
+      "links": {},
+      "address": "0x926F1c4cf1456978b568d64f9ec3727652776009",
+      "transactionHash": "0x07c28c5f2dc187dff3932bad7774a3945e924c627701f8da89050c0b4d5da5bb"
+    },
+    "1625554662253": {
+      "events": {
+        "0xc66bcbe13027ad75e39e0c01012b117bd4090ec89074d6e87c1a0a9692685e51": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_kandidatID",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_totalVote",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "bytes32",
+              "name": "_kandidatName",
+              "type": "bytes32"
+            },
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "_ownerAddress",
+              "type": "address"
+            }
+          ],
+          "name": "RegisterKandidat",
+          "type": "event"
+        },
+        "0x7230904336638db5b4f894024258b07b436918de8a60ef98f15e2c1982e4e546": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "_pemilihAddress",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_statusHakPilih",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "bool",
+              "name": "statusVoting",
+              "type": "bool"
+            },
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "_ownerAddress",
+              "type": "address"
+            }
+          ],
+          "name": "RegisterPemilih",
+          "type": "event"
+        },
+        "0x749addf8eadeff63c43be59c27331be5c6d4fc9e82bbfbcf162321c9b35a95b4": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "voterAddress",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "kandidatID",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "bool",
+              "name": "statusVoting",
+              "type": "bool"
+            }
+          ],
+          "name": "Voted",
+          "type": "event"
+        },
+        "0x7a01a2c9557cf6a0bb4a723bf0cd2672baab8cc6d1c39bf00334be8b7459a963": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_registerstart",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_registerfinis",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_votingstart",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_votingfinis",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "_ownerAddress",
+              "type": "address"
+            }
+          ],
+          "name": "VotingTime",
+          "type": "event"
+        }
+      },
+      "links": {},
+      "address": "0x54D3caccaA464DB76420Ed079bdF4b1EE5F279cD",
+      "transactionHash": "0x719f6b48ab818ac1f7257624af35c7e3d0169a1f23583fc47784e8ff4898e2c4"
+    },
+    "1625731678734": {
+      "events": {
+        "0xc66bcbe13027ad75e39e0c01012b117bd4090ec89074d6e87c1a0a9692685e51": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_kandidatID",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_totalVote",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "bytes32",
+              "name": "_kandidatName",
+              "type": "bytes32"
+            },
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "_ownerAddress",
+              "type": "address"
+            }
+          ],
+          "name": "RegisterKandidat",
+          "type": "event"
+        },
+        "0x7230904336638db5b4f894024258b07b436918de8a60ef98f15e2c1982e4e546": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "_pemilihAddress",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_statusHakPilih",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "bool",
+              "name": "statusVoting",
+              "type": "bool"
+            },
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "_ownerAddress",
+              "type": "address"
+            }
+          ],
+          "name": "RegisterPemilih",
+          "type": "event"
+        },
+        "0x749addf8eadeff63c43be59c27331be5c6d4fc9e82bbfbcf162321c9b35a95b4": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "voterAddress",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "kandidatID",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "bool",
+              "name": "statusVoting",
+              "type": "bool"
+            }
+          ],
+          "name": "Voted",
+          "type": "event"
+        },
+        "0x7a01a2c9557cf6a0bb4a723bf0cd2672baab8cc6d1c39bf00334be8b7459a963": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_registerstart",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_registerfinis",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_votingstart",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_votingfinis",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "_ownerAddress",
+              "type": "address"
+            }
+          ],
+          "name": "VotingTime",
+          "type": "event"
+        }
+      },
+      "links": {},
+      "address": "0x4a03A1C77cfb6B15484DD03A68b3B92E50402Fe3",
+      "transactionHash": "0xa51c10f644fb205b9ef9f05f388ab70cd9dfb76712ec2443d33d6b39aff822b3"
+    },
+    "1625947395708": {
+      "events": {
+        "0xc66bcbe13027ad75e39e0c01012b117bd4090ec89074d6e87c1a0a9692685e51": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_kandidatID",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_totalVote",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "bytes32",
+              "name": "_kandidatName",
+              "type": "bytes32"
+            },
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "_ownerAddress",
+              "type": "address"
+            }
+          ],
+          "name": "RegisterKandidat",
+          "type": "event"
+        },
+        "0x7230904336638db5b4f894024258b07b436918de8a60ef98f15e2c1982e4e546": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "_pemilihAddress",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_statusHakPilih",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "bool",
+              "name": "statusVoting",
+              "type": "bool"
+            },
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "_ownerAddress",
+              "type": "address"
+            }
+          ],
+          "name": "RegisterPemilih",
+          "type": "event"
+        },
+        "0x749addf8eadeff63c43be59c27331be5c6d4fc9e82bbfbcf162321c9b35a95b4": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "voterAddress",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "kandidatID",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "bool",
+              "name": "statusVoting",
+              "type": "bool"
+            }
+          ],
+          "name": "Voted",
+          "type": "event"
+        },
+        "0x7a01a2c9557cf6a0bb4a723bf0cd2672baab8cc6d1c39bf00334be8b7459a963": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_registerstart",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_registerfinis",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_votingstart",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_votingfinis",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "_ownerAddress",
+              "type": "address"
+            }
+          ],
+          "name": "VotingTime",
+          "type": "event"
+        }
+      },
+      "links": {},
+      "address": "0x415C7A5b67006435fb5EBfECd0B8cC5807b12e99",
+      "transactionHash": "0xfe98494bc924712fab6f407dbf316929afa1fc319ba6f6c34d1e54674f4a26dd"
+    },
+    "1626014527340": {
+      "events": {
+        "0xc66bcbe13027ad75e39e0c01012b117bd4090ec89074d6e87c1a0a9692685e51": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_kandidatID",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_totalVote",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "bytes32",
+              "name": "_kandidatName",
+              "type": "bytes32"
+            },
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "_ownerAddress",
+              "type": "address"
+            }
+          ],
+          "name": "RegisterKandidat",
+          "type": "event"
+        },
+        "0x7230904336638db5b4f894024258b07b436918de8a60ef98f15e2c1982e4e546": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "_pemilihAddress",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_statusHakPilih",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "bool",
+              "name": "statusVoting",
+              "type": "bool"
+            },
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "_ownerAddress",
+              "type": "address"
+            }
+          ],
+          "name": "RegisterPemilih",
+          "type": "event"
+        },
+        "0x749addf8eadeff63c43be59c27331be5c6d4fc9e82bbfbcf162321c9b35a95b4": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "voterAddress",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "kandidatID",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "bool",
+              "name": "statusVoting",
+              "type": "bool"
+            }
+          ],
+          "name": "Voted",
+          "type": "event"
+        },
+        "0x7a01a2c9557cf6a0bb4a723bf0cd2672baab8cc6d1c39bf00334be8b7459a963": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_registerstart",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_registerfinis",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_votingstart",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_votingfinis",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "_ownerAddress",
+              "type": "address"
+            }
+          ],
+          "name": "VotingTime",
+          "type": "event"
+        }
+      },
+      "links": {},
+      "address": "0x4C4F7fAAeD849570329aEb7786ce2F35E2fC3039",
+      "transactionHash": "0x0a818faefa24d454e298c0d60bae2502a444f0f1ae21c004c0992f133f4c5f15"
+    },
+    "1626226662746": {
+      "events": {
+        "0xc66bcbe13027ad75e39e0c01012b117bd4090ec89074d6e87c1a0a9692685e51": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_kandidatID",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_totalVote",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "bytes32",
+              "name": "_kandidatName",
+              "type": "bytes32"
+            },
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "_ownerAddress",
+              "type": "address"
+            }
+          ],
+          "name": "RegisterKandidat",
+          "type": "event"
+        },
+        "0x7230904336638db5b4f894024258b07b436918de8a60ef98f15e2c1982e4e546": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "_pemilihAddress",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_statusHakPilih",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "bool",
+              "name": "statusVoting",
+              "type": "bool"
+            },
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "_ownerAddress",
+              "type": "address"
+            }
+          ],
+          "name": "RegisterPemilih",
+          "type": "event"
+        },
+        "0x749addf8eadeff63c43be59c27331be5c6d4fc9e82bbfbcf162321c9b35a95b4": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "voterAddress",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "kandidatID",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "bool",
+              "name": "statusVoting",
+              "type": "bool"
+            }
+          ],
+          "name": "Voted",
+          "type": "event"
+        },
+        "0x7a01a2c9557cf6a0bb4a723bf0cd2672baab8cc6d1c39bf00334be8b7459a963": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_registerstart",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_registerfinis",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_votingstart",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_votingfinis",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "_ownerAddress",
+              "type": "address"
+            }
+          ],
+          "name": "VotingTime",
+          "type": "event"
+        }
+      },
+      "links": {},
+      "address": "0x21c90c1766e37653c6470FC4cF92Ed09e406e10F",
+      "transactionHash": "0x266676a837613a0d034122c83b8b0a13a1cb9b402b2aae5b9a23165d25943da3"
+    },
+    "1626283989394": {
+      "events": {
+        "0xc66bcbe13027ad75e39e0c01012b117bd4090ec89074d6e87c1a0a9692685e51": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_kandidatID",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_totalVote",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "bytes32",
+              "name": "_kandidatName",
+              "type": "bytes32"
+            },
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "_ownerAddress",
+              "type": "address"
+            }
+          ],
+          "name": "RegisterKandidat",
+          "type": "event"
+        },
+        "0x7230904336638db5b4f894024258b07b436918de8a60ef98f15e2c1982e4e546": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "_pemilihAddress",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_statusHakPilih",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "bool",
+              "name": "statusVoting",
+              "type": "bool"
+            },
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "_ownerAddress",
+              "type": "address"
+            }
+          ],
+          "name": "RegisterPemilih",
+          "type": "event"
+        },
+        "0x749addf8eadeff63c43be59c27331be5c6d4fc9e82bbfbcf162321c9b35a95b4": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "voterAddress",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "kandidatID",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "bool",
+              "name": "statusVoting",
+              "type": "bool"
+            }
+          ],
+          "name": "Voted",
+          "type": "event"
+        },
+        "0x7a01a2c9557cf6a0bb4a723bf0cd2672baab8cc6d1c39bf00334be8b7459a963": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_registerstart",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_registerfinis",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_votingstart",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_votingfinis",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "_ownerAddress",
+              "type": "address"
+            }
+          ],
+          "name": "VotingTime",
+          "type": "event"
+        }
+      },
+      "links": {},
+      "address": "0xf8DDCafC99AFE82Ee95Ac992762385882FD48Be4",
+      "transactionHash": "0x58f6f09c8d7c67fb35f737760a31806dcf1cc5804a2152effad8c110187c0144"
+    },
+    "1626311651113": {
+      "events": {
+        "0xc66bcbe13027ad75e39e0c01012b117bd4090ec89074d6e87c1a0a9692685e51": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_kandidatID",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_totalVote",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "bytes32",
+              "name": "_kandidatName",
+              "type": "bytes32"
+            },
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "_ownerAddress",
+              "type": "address"
+            }
+          ],
+          "name": "RegisterKandidat",
+          "type": "event"
+        },
+        "0x7230904336638db5b4f894024258b07b436918de8a60ef98f15e2c1982e4e546": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "_pemilihAddress",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_statusHakPilih",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "bool",
+              "name": "statusVoting",
+              "type": "bool"
+            },
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "_ownerAddress",
+              "type": "address"
+            }
+          ],
+          "name": "RegisterPemilih",
+          "type": "event"
+        },
+        "0x749addf8eadeff63c43be59c27331be5c6d4fc9e82bbfbcf162321c9b35a95b4": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "voterAddress",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "kandidatID",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "bool",
+              "name": "statusVoting",
+              "type": "bool"
+            }
+          ],
+          "name": "Voted",
+          "type": "event"
+        },
+        "0x7a01a2c9557cf6a0bb4a723bf0cd2672baab8cc6d1c39bf00334be8b7459a963": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_registerstart",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_registerfinis",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_votingstart",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_votingfinis",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "_ownerAddress",
+              "type": "address"
+            }
+          ],
+          "name": "VotingTime",
+          "type": "event"
+        }
+      },
+      "links": {},
+      "address": "0x1980d3BC84F82d23993FD936b5626efcb914FfA9",
+      "transactionHash": "0x8a156c027da1f61a11cd80a693872a2204c517cd69e63dab08526f74c3689400"
+    },
+    "1626314886278": {
+      "events": {
+        "0xc66bcbe13027ad75e39e0c01012b117bd4090ec89074d6e87c1a0a9692685e51": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_kandidatID",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_totalVote",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "bytes32",
+              "name": "_kandidatName",
+              "type": "bytes32"
+            },
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "_ownerAddress",
+              "type": "address"
+            }
+          ],
+          "name": "RegisterKandidat",
+          "type": "event"
+        },
+        "0x7230904336638db5b4f894024258b07b436918de8a60ef98f15e2c1982e4e546": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "_pemilihAddress",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_statusHakPilih",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "bool",
+              "name": "statusVoting",
+              "type": "bool"
+            },
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "_ownerAddress",
+              "type": "address"
+            }
+          ],
+          "name": "RegisterPemilih",
+          "type": "event"
+        },
+        "0x749addf8eadeff63c43be59c27331be5c6d4fc9e82bbfbcf162321c9b35a95b4": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "voterAddress",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "kandidatID",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "bool",
+              "name": "statusVoting",
+              "type": "bool"
+            }
+          ],
+          "name": "Voted",
+          "type": "event"
+        },
+        "0x7a01a2c9557cf6a0bb4a723bf0cd2672baab8cc6d1c39bf00334be8b7459a963": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_registerstart",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_registerfinis",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_votingstart",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_votingfinis",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "_ownerAddress",
+              "type": "address"
+            }
+          ],
+          "name": "VotingTime",
+          "type": "event"
+        }
+      },
+      "links": {},
+      "address": "0x848f3C09c365507357b2030026450eeBc13e8Bf8",
+      "transactionHash": "0x0c4ae5593322fd22f6a690c04cf9cdf6df492d3786807ab00c5b2fdab3e31c36"
+    },
+    "1626471118149": {
+      "events": {
+        "0xc66bcbe13027ad75e39e0c01012b117bd4090ec89074d6e87c1a0a9692685e51": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_kandidatID",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_totalVote",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "bytes32",
+              "name": "_kandidatName",
+              "type": "bytes32"
+            },
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "_ownerAddress",
+              "type": "address"
+            }
+          ],
+          "name": "RegisterKandidat",
+          "type": "event"
+        },
+        "0x7230904336638db5b4f894024258b07b436918de8a60ef98f15e2c1982e4e546": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "_pemilihAddress",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_statusHakPilih",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "bool",
+              "name": "statusVoting",
+              "type": "bool"
+            },
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "_ownerAddress",
+              "type": "address"
+            }
+          ],
+          "name": "RegisterPemilih",
+          "type": "event"
+        },
+        "0x749addf8eadeff63c43be59c27331be5c6d4fc9e82bbfbcf162321c9b35a95b4": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "voterAddress",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "kandidatID",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "bool",
+              "name": "statusVoting",
+              "type": "bool"
+            }
+          ],
+          "name": "Voted",
+          "type": "event"
+        },
+        "0x7a01a2c9557cf6a0bb4a723bf0cd2672baab8cc6d1c39bf00334be8b7459a963": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_registerstart",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_registerfinis",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_votingstart",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_votingfinis",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "_ownerAddress",
+              "type": "address"
+            }
+          ],
+          "name": "VotingTime",
+          "type": "event"
+        }
+      },
+      "links": {},
+      "address": "0x6AAFE54c2330D9a862a9eE617237357D3FE76731",
+      "transactionHash": "0x237601ea518457492877f59fee95c2fe5ffaa46fce8ba4ab3e4b7455dbe2c5c6"
     }
   },
   "schemaVersion": "3.3.3",
-  "updatedAt": "2021-06-29T20:40:29.864Z",
+  "updatedAt": "2021-07-16T21:33:03.055Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",

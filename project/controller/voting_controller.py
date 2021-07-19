@@ -16,15 +16,6 @@ message_object_model = api.model(
     }
 )
 
-hasil_pemilihan_model = api.model(
-    "Model untuk hasil pemilihan",
-    {
-        "nomor_urut": fields.Integer,
-        "nama_kandidat": fields.String,
-        "image_url": fields.String,
-    },
-)
-
 voting_data_model = api.model(
     "Model untuk voting controller",
     {"kandidatId": fields.Integer(requied=True)},
@@ -36,7 +27,8 @@ kandidat_model = api.model(
         "nomor_urut": fields.Integer,
         "nama": fields.String,
         "visi": fields.String,
-        "misi": fields.String
+        "misi": fields.String,
+        "image_url":fields.String
     }
 )
 
@@ -45,6 +37,32 @@ quick_count_mode = api.model(
     {
         "nama_kandidat": fields.String(readonly=True),
         "total_suara": fields.Integer(readonly=True),
+    },
+)
+
+data_kandidat = {}
+data_kandidat['nomor_urut'] = fields.String(attribute="nomor_urut")
+data_kandidat['nama'] = fields.String(attribute="nama")
+data_kandidat['visi'] = fields.String(attribute="visi")
+data_kandidat['misi'] = fields.String(attribute="misi")
+data_kandidat['image_url'] = fields.String(attribute="image_url")
+
+bukti_pemilihan_model = api.model(
+    "Model untuk bukti pemilihan",
+    {
+        "status":fields.String, 
+        "message":fields.String,
+        "tx_hash":fields.String(skip_none=True),
+        "data":fields.Nested(data_kandidat, skip_none=True)
+    }
+)
+
+hasil_pemilihan_model = api.model(
+    "Model untuk hasil pemilihan",
+    {
+        "status":fields.String,
+        "message":fields.String,
+        "data":fields.Nested(data_kandidat, skip_none=True)
     },
 )
 
@@ -65,10 +83,10 @@ class CheckStatusWaktuPendaftaran(Resource):
     @api.doc(responses={200:"OK", 500:"Internal server error"})
     def get(self):
         result = voting.CheckRegiserWaktu()
-        if result['status'] == "Berhasil" or result['status'] == "Gagal":
+        if result['status'] == "Berhasil":
             return result
         else:
-            api.abort(500, "Internal server error")
+            return result
 
 @api.route('/status/waktu/pemilihan')
 class CheckStatusWaktuPemilihan(Resource):
@@ -146,3 +164,16 @@ class HasilPemilihan(Resource):
             api.abort(500, hasil)
         else:
             return hasil
+
+@api.route("/kandidat/dipilih")
+class KandidatDipilih(Resource):
+    @jwt_required()
+    @marshal_with(bukti_pemilihan_model)
+    @api.doc(responses={200:"OK", 500:"Internal server error"})
+    def get(self):
+        user_data = get_jwt()['sub']
+        try:
+            result = voting.GetKandidatTerpilih(user_data)
+            return result
+        except Exception as e:
+            api.abort(500, e)

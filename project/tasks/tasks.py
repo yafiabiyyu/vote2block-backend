@@ -66,7 +66,7 @@ def SetupTimestampTask(
         signature,
     ).buildTransaction(
         {
-            "gas": 150000,
+            "gas": 1000000,
             "gasPrice": w3.toWei("25", "gwei"),
             "nonce": main_account_nonce,
         }
@@ -99,7 +99,7 @@ def RegisterKandidatTask(
         kandidatID, nonce, livetime, kandidatNameBytes, signature
     ).buildTransaction(
         {
-            "gas": 150000,
+            "gas": 1000000,
             "gasPrice": w3.toWei("25", "gwei"),
             "nonce": main_account_nonce,
         }
@@ -110,7 +110,8 @@ def RegisterKandidatTask(
     try:
         w3.eth.sendRawTransaction(sign_tx.rawTransaction)
         return w3.toHex(w3.keccak(sign_tx.rawTransaction))
-    except Exception:
+    except Exception as e:
+        print(e)
         return "Gagal"
 
 
@@ -130,9 +131,9 @@ def RegisterPemilihTask(pemilihAddress, nonce, signature):
         pemilihAddress, nonce, livetime, signature
     ).buildTransaction(
         {
-            "gas": 150000,
+            "gas": 1000000,
             "gasPrice": w3.toWei("25", "gwei"),
-            "nonce": main_account_nonce,
+            "nonce":main_account_nonce
         }
     )
     sign_tx = w3.eth.account.sign_transaction(
@@ -161,9 +162,9 @@ def VotingTask(kandidatID, nonce, signature):
         kandidatID, nonce, livetime, signature
     ).buildTransaction(
         {
-            "gas": 150000,
+            "gas": 1000000,
             "gasPrice": w3.toWei("25", "gwei"),
-            "nonce": main_account_nonce,
+            "nonce":main_account_nonce
         }
     )
     sign_tx = w3.eth.account.sign_transaction(

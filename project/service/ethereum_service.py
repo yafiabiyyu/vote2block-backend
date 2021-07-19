@@ -1,5 +1,5 @@
 from eth_account import account
-from web3 import Web3, HTTPProvider
+from web3 import Web3, HTTPProvider, WebsocketProvider
 from dotenv import load_dotenv
 from project.service.enkripsi_service import DataEnkripsi
 import json, os
