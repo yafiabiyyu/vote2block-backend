@@ -227,6 +227,7 @@ class VotingService:
             message_object = {
                 "status": "Gagal",
                 "message": "Bukti pemilihan anda masih dalam proses",
+                "ethereum_address":pemilih_address,
                 "tx_hash": "https://ropsten.etherscan.io/tx/{}".format(str(tx_hash.tx_hash))
                 
             }
@@ -235,6 +236,7 @@ class VotingService:
             kandidat_dipilih = KandidatDoc.objects(
                 nomor_urut=kandidat_terpilih_data[1]
             ).first()
+            tx_hash = PemilihTxDoc.objects(user_data=pemilih_data).first()
             kandidat = {
                 "nomor_urut": kandidat_dipilih.nomor_urut,
                 "nama": kandidat_dipilih.nama,
@@ -245,6 +247,8 @@ class VotingService:
             message_object = {
                 "status":"Berhasil",
                 "message":"Bukti Pemilihan",
+                "ethereum_address":pemilih_address,
+                "tx_hash": "https://ropsten.etherscan.io/tx/{}".format(str(tx_hash.tx_hash)),
                 "data":kandidat
             }
             return message_object

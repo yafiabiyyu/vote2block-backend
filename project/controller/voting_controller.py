@@ -52,6 +52,7 @@ bukti_pemilihan_model = api.model(
     {
         "status":fields.String, 
         "message":fields.String,
+        "ethereum_address":fields.String(skip_none=True),
         "tx_hash":fields.String(skip_none=True),
         "data":fields.Nested(data_kandidat, skip_none=True)
     }

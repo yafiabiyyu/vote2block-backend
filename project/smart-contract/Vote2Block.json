@@ -19722,10 +19722,141 @@
       "links": {},
       "address": "0xDDf47365459D7Bb2b6c820C4a303Ef9A0185674b",
       "transactionHash": "0x48e3f09bbc1795bf76abcdc0def99985042a32fd3a5a6df2c10cd0e3dcd0f81b"
+    },
+    "1627431224315": {
+      "events": {
+        "0xc66bcbe13027ad75e39e0c01012b117bd4090ec89074d6e87c1a0a9692685e51": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_kandidatID",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_totalVote",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "bytes32",
+              "name": "_kandidatName",
+              "type": "bytes32"
+            },
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "_ownerAddress",
+              "type": "address"
+            }
+          ],
+          "name": "RegisterKandidat",
+          "type": "event"
+        },
+        "0x7230904336638db5b4f894024258b07b436918de8a60ef98f15e2c1982e4e546": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "_pemilihAddress",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_statusHakPilih",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "bool",
+              "name": "statusVoting",
+              "type": "bool"
+            },
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "_ownerAddress",
+              "type": "address"
+            }
+          ],
+          "name": "RegisterPemilih",
+          "type": "event"
+        },
+        "0x749addf8eadeff63c43be59c27331be5c6d4fc9e82bbfbcf162321c9b35a95b4": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "voterAddress",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "kandidatID",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "bool",
+              "name": "statusVoting",
+              "type": "bool"
+            }
+          ],
+          "name": "Voted",
+          "type": "event"
+        },
+        "0x7a01a2c9557cf6a0bb4a723bf0cd2672baab8cc6d1c39bf00334be8b7459a963": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_registerstart",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_registerfinis",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_votingstart",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_votingfinis",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "_ownerAddress",
+              "type": "address"
+            }
+          ],
+          "name": "VotingTime",
+          "type": "event"
+        }
+      },
+      "links": {},
+      "address": "0x457c8D66C5944B4972c1009D6C96765CC3D89260",
+      "transactionHash": "0xbdf004b7996ef760de3513309ab6c7674c16fc9a944dd39c0257ffece90ecc0a"
     }
   },
   "schemaVersion": "3.3.3",
-  "updatedAt": "2021-07-22T11:50:56.559Z",
+  "updatedAt": "2021-07-28T00:54:42.029Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",
